@@ -1,5 +1,5 @@
 """
-Custom exception handlers for CivicSense AI
+Custom exception handlers for Urban Lens
 """
 import logging
 from rest_framework.views import exception_handler

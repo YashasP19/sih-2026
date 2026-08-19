@@ -1,5 +1,5 @@
 # Software Requirements Specification (SRS)
-## CivicSense AI: Intelligent Civic Grievance Redressal & Transparency Platform
+## Urban Lens: Intelligent Civic Grievance Redressal & Transparency Platform
 **Target Hackathon:** Smart India Hackathon (SIH 2026)  
 **Document Version:** 1.0.0  
 **Status:** Production Ready  
@@ -9,7 +9,7 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-The purpose of this document is to define the functional, non-functional, data, and architectural requirements for **CivicSense AI**, an enterprise-grade, AI-powered civic grievance redressal and municipal transparency system. The platform streamlines grievance ingestion, automates NLP categorization, dynamically calculates risk-based priority scores, eliminates duplicate submissions via geo-spatial matching, and offers public dashboards for municipal accountability.
+The purpose of this document is to define the functional, non-functional, data, and architectural requirements for **Urban Lens**, an enterprise-grade, AI-powered civic grievance redressal and municipal transparency system. The platform streamlines grievance ingestion, automates NLP categorization, dynamically calculates risk-based priority scores, eliminates duplicate submissions via geo-spatial matching, and offers public dashboards for municipal accountability.
 
 ### 1.2 Scope
 Traditional municipal grievance portals suffer from:
@@ -18,7 +18,7 @@ Traditional municipal grievance portals suffer from:
 - Spam and redundant multi-filing of the same localized issue.
 - Lack of radical transparency, leading to public mistrust.
 
-CivicSense AI solves these challenges by combining Natural Language Processing (NLP), spatial density algorithms (Haversine & TF-IDF Cosine Similarity), interactive Leaflet heatmaps, and role-based workflows for Citizens, Field Officers, and Municipal Administrators.
+Urban Lens solves these challenges by combining Natural Language Processing (NLP), spatial density algorithms (Haversine & TF-IDF Cosine Similarity), interactive Leaflet heatmaps, and role-based workflows for Citizens, Field Officers, and Municipal Administrators.
 
 ---
 

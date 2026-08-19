@@ -1,5 +1,5 @@
 """
-Complaint, Audit Log, and Community Endorsement Models for CivicSense AI
+Complaint, Audit Log, and Community Endorsement Models for Urban Lens
 """
 import uuid
 import random

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: civicsense-api
+    name: urban-lens-api
     runtime: python
     rootDir: backend
     plan: free

@@ -1,5 +1,5 @@
 """
-Core constants for CivicSense AI Platform
+Core constants for Urban Lens Platform
 """
 
 # User Roles

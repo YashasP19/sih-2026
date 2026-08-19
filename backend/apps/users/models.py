@@ -1,5 +1,5 @@
 """
-Custom User Model for CivicSense AI
+Custom User Model for Urban Lens
 """
 from django.contrib.auth.models import AbstractUser
 from django.db import models

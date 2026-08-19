@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏛️ CivicSense AI
+# 🏛️ Urban Lens
 
 ### Next-Gen Civic Grievance Redressal & Municipal Transparency Platform
 
@@ -39,7 +39,7 @@
 
 ## 🌐 Overview
 
-**CivicSense AI** is a full-stack intelligent civic grievance management system designed to bridge the gap between citizens and municipal authorities. By leveraging **Natural Language Processing**, **geo-spatial analytics**, and **real-time dashboards**, it enables:
+**Urban Lens** is a full-stack intelligent civic grievance management system designed to bridge the gap between citizens and municipal authorities. By leveraging **Natural Language Processing**, **geo-spatial analytics**, and **real-time dashboards**, it enables:
 
 - 🧑‍💼 **Citizens** to file, track, and follow up on grievances seamlessly
 - 🏢 **Officers** to manage, prioritize, and resolve complaints efficiently
@@ -58,7 +58,7 @@
 | 5 | 📍 **Geo-Spatial Deduplication** | Haversine + cosine similarity to suppress duplicate complaints within a 500m radius |
 | 6 | 🗺️ **Interactive Heatmaps** | Ward-level Leaflet maps with complaint density, photo evidence & GPS pinning |
 | 7 | 📊 **Public Transparency Dashboard** | Open metrics: total grievances, SLA turnarounds, department efficiency rankings, 7-day charts |
-| 8 | 🎖️ **Civic Karma Gamification** | Verified filers earn Karma points to encourage active community participation |
+| 8 | 🎖️ **Civic Karma Leaderboard** | Citizens earn Karma points for verified reports, officers/admins are ranked by grievances resolved — surfaced on a live leaderboard |
 
 ---
 
@@ -95,7 +95,7 @@ sih-2026/
 ├── frontend/                       # React 18 + Tailwind + Leaflet
 │   └── src/
 │       ├── components/             # Glassmorphic UI, Maps, Badges, Modals
-│       ├── pages/                  # Landing, Login, Dashboard, Submit, Admin, Analytics
+│       ├── pages/                  # Landing, Login, Dashboard, Submit, Admin, Analytics, Leaderboard
 │       ├── services/               # Axios API client, Auth & Complaint services
 │       ├── context/                # AuthContext, ThemeContext, NotificationContext
 │       └── routes.jsx              # Role-based protected routes

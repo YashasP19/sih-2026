@@ -4,7 +4,7 @@ export const ThemeContext = createContext(null);
 
 export const ThemeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('civicsense_theme');
+    const saved = localStorage.getItem('urbanlens_theme');
     return saved !== null ? saved === 'dark' : false;
   });
 
@@ -12,10 +12,10 @@ export const ThemeProvider = ({ children }) => {
     const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
-      localStorage.setItem('civicsense_theme', 'dark');
+      localStorage.setItem('urbanlens_theme', 'dark');
     } else {
       root.classList.remove('dark');
-      localStorage.setItem('civicsense_theme', 'light');
+      localStorage.setItem('urbanlens_theme', 'light');
     }
   }, [isDark]);
 

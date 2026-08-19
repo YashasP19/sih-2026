@@ -1,5 +1,5 @@
 """
-Authentication and User Management Views for CivicSense AI
+Authentication and User Management Views for Urban Lens
 """
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response

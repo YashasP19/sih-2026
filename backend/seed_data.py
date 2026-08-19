@@ -1,5 +1,5 @@
 """
-Comprehensive Demo Data Seeder for CivicSense AI Platform
+Comprehensive Demo Data Seeder for Urban Lens Platform
 Seeds test users (Citizens, Department Officers, Admins) and realistic civic grievances.
 """
 import os
@@ -26,13 +26,13 @@ User = get_user_model()
 
 
 def seed_database():
-    print("[*] Starting CivicSense AI Data Seeding...")
+    print("[*] Starting Urban Lens Data Seeding...")
 
     # 1. Create Super Admin
     admin_user, _ = User.objects.get_or_create(
         username='admin',
         defaults={
-            'email': 'admin@civicsense.gov.in',
+            'email': 'admin@urbanlens.gov.in',
             'first_name': 'Municipal',
             'last_name': 'Commissioner',
             'role': ROLE_ADMIN,
@@ -85,7 +85,7 @@ def seed_database():
     officer_roads, _ = User.objects.get_or_create(
         username='officer_roads',
         defaults={
-            'email': 'rajesh.pwd@civicsense.gov.in',
+            'email': 'rajesh.pwd@urbanlens.gov.in',
             'first_name': 'Rajesh',
             'last_name': 'Gupta',
             'role': ROLE_OFFICER,
@@ -102,7 +102,7 @@ def seed_database():
     officer_sanitation, _ = User.objects.get_or_create(
         username='officer_sanitation',
         defaults={
-            'email': 'sunita.swm@civicsense.gov.in',
+            'email': 'sunita.swm@urbanlens.gov.in',
             'first_name': 'Dr. Sunita',
             'last_name': 'Rao',
             'role': ROLE_OFFICER,
@@ -119,7 +119,7 @@ def seed_database():
     officer_power, _ = User.objects.get_or_create(
         username='officer_power',
         defaults={
-            'email': 'anil.power@civicsense.gov.in',
+            'email': 'anil.power@urbanlens.gov.in',
             'first_name': 'Anil',
             'last_name': 'Deshmukh',
             'role': ROLE_OFFICER,

@@ -1,5 +1,5 @@
 """
-Core permissions for Role-Based Access Control (RBAC) in CivicSense AI
+Core permissions for Role-Based Access Control (RBAC) in Urban Lens
 """
 from rest_framework import permissions
 from core.constants import ROLE_CITIZEN, ROLE_OFFICER, ROLE_ADMIN

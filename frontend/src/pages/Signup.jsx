@@ -68,7 +68,7 @@ export default function Signup() {
     setLoading(false);
 
     if (res.success) {
-      addToast('Account created successfully! Welcome to CivicSense AI.', 'success');
+      addToast('Account created successfully! Welcome to Urban Lens.', 'success');
       if (formData.role === 'OFFICER' || formData.role === 'ADMIN') {
         navigate('/admin-dashboard');
       } else {

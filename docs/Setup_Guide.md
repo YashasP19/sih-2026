@@ -1,6 +1,6 @@
-# CivicSense AI: Local & Production Setup Guide
+# Urban Lens: Local & Production Setup Guide
 
-This guide contains step-by-step instructions to run **CivicSense AI** locally or via Docker.
+This guide contains step-by-step instructions to run **Urban Lens** locally or via Docker.
 
 ---
 

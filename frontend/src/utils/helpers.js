@@ -41,7 +41,7 @@ export function truncate(text, max = 100) {
 }
 
 /**
- * Extract a user-friendly message from CivicSense API error responses.
+ * Extract a user-friendly message from Urban Lens API error responses.
  */
 export function parseApiError(error, fallback = 'Something went wrong. Please try again.') {
   if (!error?.response) {

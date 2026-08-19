@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { complaintService } from '../services/complaintService';
 import Sidebar from '../components/Sidebar';
+import PageTransition from '../components/PageTransition';
 import Card from '../components/Card';
 import StatusBadge from '../components/StatusBadge';
 import PriorityBadge from '../components/PriorityBadge';
@@ -70,7 +71,7 @@ export default function Dashboard() {
       <div className="flex gap-8">
         <Sidebar role="CITIZEN" />
 
-        <div className="flex-1 space-y-6">
+        <PageTransition className="flex-1 space-y-6">
           {/* Top Banner */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-teal-soft to-white border border-civic-teal/25">
             <div>
@@ -232,7 +233,7 @@ export default function Dashboard() {
               ))}
             </div>
           )}
-        </div>
+        </PageTransition>
       </div>
 
       {/* Ticket Detail Modal */}

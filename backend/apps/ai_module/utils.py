@@ -1,5 +1,5 @@
 """
-AI & NLP Utilities for CivicSense AI: Text Cleaning, Keyword Extraction, Haversine Distance
+AI & NLP Utilities for Urban Lens: Text Cleaning, Keyword Extraction, Haversine Distance
 """
 import math
 import re

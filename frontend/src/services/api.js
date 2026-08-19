@@ -11,7 +11,7 @@ const api = axios.create({
 // Request interceptor: Attach JWT token if available in localStorage
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('civicsense_access_token');
+    const token = localStorage.getItem('urbanlens_access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,20 +27,20 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('civicsense_refresh_token');
+      const refreshToken = localStorage.getItem('urbanlens_refresh_token');
       if (refreshToken) {
         try {
           const res = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, {
             refresh: refreshToken,
           });
           const newAccess = res.data.access;
-          localStorage.setItem('civicsense_access_token', newAccess);
+          localStorage.setItem('urbanlens_access_token', newAccess);
           originalRequest.headers.Authorization = `Bearer ${newAccess}`;
           return api(originalRequest);
         } catch (refreshErr) {
-          localStorage.removeItem('civicsense_access_token');
-          localStorage.removeItem('civicsense_refresh_token');
-          localStorage.removeItem('civicsense_user');
+          localStorage.removeItem('urbanlens_access_token');
+          localStorage.removeItem('urbanlens_refresh_token');
+          localStorage.removeItem('urbanlens_user');
         }
       }
     }

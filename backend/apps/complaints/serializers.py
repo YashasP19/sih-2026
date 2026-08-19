@@ -20,7 +20,7 @@ class ActivityLogSerializer(serializers.ModelSerializer):
     def get_performed_by_name(self, obj):
         if obj.performed_by:
             return obj.performed_by.get_full_name() or obj.performed_by.username
-        return 'CivicSense AI Engine'
+        return 'Urban Lens Engine'
 
 
 class ComplaintListSerializer(serializers.ModelSerializer):

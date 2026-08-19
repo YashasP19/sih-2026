@@ -1,5 +1,5 @@
 """
-Main URL Configuration for CivicSense AI Platform
+Main URL Configuration for Urban Lens Platform
 """
 from django.contrib import admin
 from django.urls import path, include
@@ -15,7 +15,7 @@ from rest_framework.response import Response
 def api_root_view(request):
     """API health check and directory index."""
     return Response({
-        'platform': 'CivicSense AI - Civic Grievance Redressal & Transparency Platform',
+        'platform': 'Urban Lens - Civic Grievance Redressal & Transparency Platform',
         'version': '1.0.0',
         'status': 'ONLINE',
         'endpoints': {

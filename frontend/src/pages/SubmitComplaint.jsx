@@ -7,6 +7,8 @@ import { CATEGORIES } from '../utils/constants';
 import MapComponent from '../components/MapComponent';
 import PriorityBadge from '../components/PriorityBadge';
 import VoiceMicButton from '../components/VoiceMicButton';
+import Sidebar from '../components/Sidebar';
+import PageTransition from '../components/PageTransition';
 import {
   Sparkles,
   Camera,
@@ -189,8 +191,14 @@ export default function SubmitComplaint() {
     }
   };
 
+  const isOfficerOrAdmin = user?.role === 'OFFICER' || user?.role === 'ADMIN';
+
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="flex gap-8">
+        <Sidebar role={isOfficerOrAdmin ? 'OFFICER' : 'CITIZEN'} />
+
+        <PageTransition className="flex-1">
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-civic-teal-soft border border-civic-teal/30 text-civic-teal text-xs font-semibold mb-2">
           <Sparkles className="w-3.5 h-3.5" />
@@ -366,7 +374,7 @@ export default function SubmitComplaint() {
           <div className="p-6 rounded-3xl glass-panel sticky top-20 border border-civic-teal/25 shadow-2xl">
             <div className="flex items-center gap-2 pb-4 border-b border-civic-line text-civic-teal">
               <Sparkles className="w-5 h-5" />
-              <h3 className="font-bold text-civic-ink text-base">CivicSense AI Assistant</h3>
+              <h3 className="font-bold text-civic-ink text-base">Urban Lens Assistant</h3>
             </div>
 
             {aiLoading && (
@@ -430,6 +438,8 @@ export default function SubmitComplaint() {
             )}
           </div>
         </div>
+      </div>
+        </PageTransition>
       </div>
     </div>
   );

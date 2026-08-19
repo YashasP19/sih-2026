@@ -8,6 +8,7 @@ import Card from '../components/Card';
 import StatusBadge from '../components/StatusBadge';
 import PriorityBadge from '../components/PriorityBadge';
 import Modal from '../components/Modal';
+import PageTransition from '../components/PageTransition';
 import Loader from '../components/Loader';
 import { formatDate, timeAgo } from '../utils/helpers';
 import {
@@ -149,7 +150,7 @@ export default function AdminDashboard() {
       <div className="flex gap-8">
         <Sidebar role="OFFICER" />
 
-        <div className="flex-1 space-y-6">
+        <PageTransition className="flex-1 space-y-6">
           {/* Header Banner */}
           <div className="p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-sand via-white to-civic-teal-soft border border-civic-teal/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -347,7 +348,7 @@ export default function AdminDashboard() {
               ))}
             </div>
           )}
-        </div>
+        </PageTransition>
       </div>
 
       {/* Detail Modal */}

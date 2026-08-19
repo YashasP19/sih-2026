@@ -176,7 +176,7 @@ export default function ComplaintChatbot() {
     data.append('category', payload.analysis?.predicted_category || 'OTHER');
     data.append('latitude', payload.latitude ?? 28.6328);
     data.append('longitude', payload.longitude ?? 77.2197);
-    data.append('address', payload.address || 'Reported via CivicSense Chatbot');
+    data.append('address', payload.address || 'Reported via Urban Lens Chatbot');
     data.append('ward_number', user?.ward_number || 'Ward 12');
     data.append('pincode', '110001');
     const res = await complaintService.submitComplaint(data);
@@ -372,7 +372,7 @@ export default function ComplaintChatbot() {
           {...launcherDrag}
           style={{ transform: `translate(${launcherOffset.x}px, ${launcherOffset.y}px)`, touchAction: 'none' }}
           className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-civic-teal text-white shadow-lift hover:scale-105 transition-transform cursor-grab active:cursor-grabbing dark:bg-teal-600"
-          aria-label="Open CivicSense chatbot (drag to move)"
+          aria-label="Open Urban Lens chatbot (drag to move)"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-sm font-bold hidden sm:inline">Civic Assist</span>
@@ -393,7 +393,7 @@ export default function ComplaintChatbot() {
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5" />
               <div>
-                <p className="text-sm font-bold leading-tight">CivicSense Assist</p>
+                <p className="text-sm font-bold leading-tight">Urban Lens Assist</p>
                 <p className="text-[10px] opacity-90 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> File · Track · AI triage · drag to move
                 </p>

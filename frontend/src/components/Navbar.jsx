@@ -14,11 +14,6 @@ import {
   Award,
 } from 'lucide-react';
 
-const navLinkClass = (active) =>
-  active
-    ? 'bg-civic-teal-soft text-civic-teal-dark dark:bg-teal-950/50 dark:text-teal-300'
-    : 'text-civic-mute hover:text-civic-ink hover:bg-civic-sand dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800';
-
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -34,41 +29,62 @@ export default function Navbar() {
     setUserDropdownOpen(false);
   };
 
+  const navBase = 'sticky top-0 z-40 w-full border-b border-civic-line/70 bg-white/80 backdrop-blur-xl dark:border-civic-night-line/70 dark:bg-civic-night-paper/80 transition-colors duration-300';
+
+  const textColor = 'text-civic-ink dark:text-slate-100';
+  const mutedColor = 'text-civic-mute dark:text-slate-400';
+  const hoverBg = 'hover:bg-civic-sand dark:hover:bg-slate-800';
+  const logoBg = 'bg-civic-teal dark:bg-teal-600';
+  const logoIconColor = 'text-white';
+
   return (
-    <nav className="sticky top-0 z-40 w-full border-b border-civic-line/70 bg-white/80 backdrop-blur-xl dark:border-civic-night-line/70 dark:bg-civic-night-paper/80 transition-colors duration-300">
+    <nav className={navBase}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-civic-teal text-white flex items-center justify-center shadow-lift group-hover:scale-105 transition-transform duration-300 dark:bg-teal-600">
-              <ShieldAlert className="w-5 h-5" />
+            <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300 ${logoBg}`}>
+              <ShieldAlert className={`w-5 h-5 ${logoIconColor}`} />
             </div>
             <div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-display text-xl font-bold text-civic-ink dark:text-slate-100 tracking-tight">CivicSense</span>
-                <span className="font-display text-xl font-bold text-civic-teal dark:text-teal-400">AI</span>
+              <div className="flex items-baseline gap-1">
+                <span className={`font-display text-lg font-bold tracking-tight ${textColor}`}>Urban Lens</span>
+                <span className="font-display text-lg font-bold text-civic-teal dark:text-teal-400">AI</span>
               </div>
-              <p className="text-[10px] text-civic-mute dark:text-slate-400 tracking-[0.14em] font-semibold uppercase">Smart Civic Redressal</p>
+              <p className={`text-[9px] tracking-[0.14em] font-semibold uppercase ${mutedColor}`}>Smart Civic Redressal</p>
             </div>
           </Link>
 
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            <Link to="/" className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${navLinkClass(isActive('/'))}`}>
+            <Link
+              to="/"
+              className={`px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${textColor} ${hoverBg} ${isActive('/') ? 'bg-civic-teal-soft text-civic-teal-dark' : ''}`}
+            >
               Home
             </Link>
             <Link
               to="/analytics"
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${navLinkClass(isActive('/analytics'))}`}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${textColor} ${hoverBg} ${isActive('/analytics') ? 'bg-civic-teal-soft text-civic-teal-dark' : ''}`}
             >
               <BarChart3 className="w-4 h-4" />
               <span>Transparency</span>
             </Link>
-
-            <Link to="/submit" className="btn-primary ml-2 !py-2 !px-4 !text-sm">
-              <PlusCircle className="w-4 h-4" />
-              <span>File Grievance</span>
-            </Link>
+            {user && (
+              <Link
+                to={user.role === 'OFFICER' || user.role === 'ADMIN' ? '/admin-dashboard' : '/dashboard'}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${textColor} ${hoverBg} ${
+                  isActive('/dashboard') || isActive('/admin-dashboard') ? 'bg-civic-teal-soft text-civic-teal-dark' : ''
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Workspace</span>
+              </Link>
+            )}
           </div>
 
+          {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             {user && <NotificationBell />}
@@ -77,20 +93,20 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-xl bg-civic-sand hover:bg-civic-teal-soft border border-civic-line text-civic-ink transition-all dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
+                  className="flex items-center gap-3 p-2 pr-4 rounded-xl border transition-all bg-civic-sand hover:bg-civic-teal-soft border-civic-line text-civic-ink dark:bg-slate-800 dark:hover:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-civic-teal text-white flex items-center justify-center font-bold text-xs uppercase dark:bg-teal-600">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm uppercase bg-civic-teal text-white dark:bg-teal-600">
                     {user.first_name ? user.first_name[0] : user.username[0]}
                   </div>
-                  <div className="text-left text-xs">
-                    <p className="font-semibold text-civic-ink dark:text-slate-100 leading-tight">{user.first_name || user.username}</p>
-                    <p className="text-[10px] text-civic-teal dark:text-teal-400 font-medium">{user.role_display || user.role}</p>
+                  <div className="text-left text-sm leading-tight whitespace-nowrap">
+                    <p className="font-semibold">{user.first_name || user.username}</p>
+                    <p className="text-xs font-medium text-civic-teal dark:text-teal-400">{user.role_display || user.role}</p>
                   </div>
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-civic-line rounded-2xl shadow-lift py-2 z-50 animate-scale-up dark:bg-civic-night-paper dark:border-civic-night-line dark:shadow-lift-dark">
-                    <div className="px-4 py-2 border-b border-civic-line dark:border-civic-night-line">
+                  <div className="absolute right-0 mt-2 w-64 bg-white border border-civic-line rounded-2xl shadow-lift py-2 z-50 animate-scale-up dark:bg-civic-night-paper dark:border-civic-night-line dark:shadow-lift-dark">
+                    <div className="px-4 py-3 border-b border-civic-line dark:border-civic-night-line">
                       <p className="text-xs text-civic-mute dark:text-slate-400">Signed in as</p>
                       <p className="text-sm font-bold text-civic-ink dark:text-slate-100 truncate">{user.email || user.username}</p>
                       {user.civic_points !== undefined && (
@@ -100,16 +116,6 @@ export default function Navbar() {
                         </div>
                       )}
                     </div>
-
-                    <Link
-                      to={user.role === 'OFFICER' || user.role === 'ADMIN' ? '/admin-dashboard' : '/dashboard'}
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-xs text-civic-mute hover:text-civic-ink hover:bg-civic-sand dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
-                    >
-                      <LayoutDashboard className="w-4 h-4 text-civic-teal dark:text-teal-400" />
-                      <span>{user.role === 'OFFICER' || user.role === 'ADMIN' ? 'Officer / Admin Portal' : 'Citizen Dashboard'}</span>
-                    </Link>
-
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 transition-colors"
@@ -122,22 +128,29 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link to="/login" className="px-3.5 py-2 text-sm font-semibold text-civic-mute hover:text-civic-ink dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
+                <Link
+                  to="/login"
+                  className={`px-3.5 py-2 text-sm font-semibold transition-colors ${mutedColor} ${hoverBg} rounded-xl`}
+                >
                   Log In
                 </Link>
-                <Link to="/signup" className="btn-secondary !py-2 !px-4 !text-sm">
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm bg-civic-teal text-white hover:bg-civic-teal-dark dark:bg-teal-600 dark:hover:bg-teal-500"
+                >
                   Sign Up
                 </Link>
               </div>
             )}
           </div>
 
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             {user && <NotificationBell />}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-civic-mute hover:text-civic-ink hover:bg-civic-sand dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+              className={`p-2 rounded-xl transition-all ${mutedColor} ${hoverBg}`}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -145,8 +158,9 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-6 border-t border-civic-line bg-white/95 space-y-2 animate-fade-in dark:border-civic-night-line dark:bg-civic-night-paper/95">
+        <div className="md:hidden px-4 pt-2 pb-6 border-t border-white/20 bg-white/95 space-y-2 animate-fade-in dark:border-civic-night-line dark:bg-civic-night-paper/95">
           <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-xl text-sm font-medium text-civic-ink hover:bg-civic-sand dark:text-slate-100 dark:hover:bg-slate-800">
             Home
           </Link>
@@ -167,10 +181,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
               <button
-                onClick={() => {
-                  handleLogout();
-                  setMobileMenuOpen(false);
-                }}
+                onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
                 className="w-full text-left px-3 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 rounded-xl mt-2"
               >
                 Sign Out

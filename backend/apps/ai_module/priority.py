@@ -1,5 +1,5 @@
 """
-Smart Dynamic Priority & Urgency Scoring Engine for CivicSense AI
+Smart Dynamic Priority & Urgency Scoring Engine for Urban Lens
 """
 from apps.ai_module.utils import clean_text
 from core.constants import URGENCY_CRITICAL, URGENCY_HIGH, URGENCY_MEDIUM, URGENCY_LOW

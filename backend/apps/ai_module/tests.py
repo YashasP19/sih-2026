@@ -1,5 +1,5 @@
 """
-Automated Unit Tests for CivicSense AI NLP & Intelligence Modules
+Automated Unit Tests for Urban Lens NLP & Intelligence Modules
 """
 from django.test import TestCase
 from apps.ai_module.classifier import ComplaintClassifier

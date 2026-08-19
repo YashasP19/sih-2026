@@ -8,7 +8,7 @@ export default function NotificationToast() {
   if (!toasts.length) return null;
 
   return (
-    <div className="fixed top-5 right-5 z-[60] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+    <div className="fixed top-20 right-5 z-[60] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
       {toasts.map((toast) => {
         let icon = <Info className="w-5 h-5 text-sky-600 dark:text-sky-400" />;
         let border = 'border-sky-200 bg-white text-sky-900 dark:border-sky-800 dark:bg-civic-night-paper dark:text-sky-200';

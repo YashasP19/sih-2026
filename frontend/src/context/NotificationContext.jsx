@@ -4,8 +4,8 @@ import { complaintService } from '../services/complaintService';
 
 export const NotificationContext = createContext(null);
 
-const inboxKey = (userId) => `civicsense_inbox_${userId || 'guest'}`;
-const snapshotKey = (userId) => `civicsense_status_snap_${userId || 'guest'}`;
+const inboxKey = (userId) => `urbanlens_inbox_${userId || 'guest'}`;
+const snapshotKey = (userId) => `urbanlens_status_snap_${userId || 'guest'}`;
 
 function loadInbox(userId) {
   try {

@@ -1,5 +1,5 @@
 """
-Complaint Management REST Views for CivicSense AI
+Complaint Management REST Views for Urban Lens
 """
 from rest_framework import generics, status, permissions
 from rest_framework.views import APIView

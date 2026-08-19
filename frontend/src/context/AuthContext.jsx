@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check initial user from localStorage
     const savedUser = authService.getCurrentUser();
-    const token = localStorage.getItem('civicsense_access_token');
+    const token = localStorage.getItem('urbanlens_access_token');
     
     if (savedUser && token) {
       setUser(savedUser);
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       authService.getProfile()
         .then((profile) => {
           setUser(profile);
-          localStorage.setItem('civicsense_user', JSON.stringify(profile));
+          localStorage.setItem('urbanlens_user', JSON.stringify(profile));
         })
         .catch(() => {
           // Keep cached user if offline or error

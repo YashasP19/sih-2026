@@ -1,5 +1,5 @@
 """
-Django settings for CivicSense AI Grievance Management System.
+Django settings for Urban Lens Grievance Management System.
 """
 import os
 import sys
@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-civicsense-ai-sih-2026-super-secret-key-production-ready')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-urban-lens-sih-2026-super-secret-key-production-ready')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
 
-    # CivicSense AI Apps
+    # Urban Lens Apps
     'core',
     'apps.users.apps.UsersConfig',
     'apps.complaints.apps.ComplaintsConfig',
@@ -105,7 +105,7 @@ elif DB_ENGINE == 'postgres' or os.environ.get('POSTGRES_DB'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB', 'civicsense_db'),
+            'NAME': os.environ.get('POSTGRES_DB', 'urban_lens_db'),
             'USER': os.environ.get('POSTGRES_USER', 'postgres'),
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
             'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),

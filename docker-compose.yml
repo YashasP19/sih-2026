@@ -3,10 +3,10 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: civicsense_postgres
+    container_name: urban_lens_postgres
     restart: always
     environment:
-      POSTGRES_DB: civicsense_db
+      POSTGRES_DB: urban_lens_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
     ports:
@@ -18,7 +18,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: civicsense_backend
+    container_name: urban_lens_backend
     restart: always
     command: >
       sh -c "python manage.py makemigrations &&
@@ -33,7 +33,7 @@ services:
     environment:
       - DEBUG=True
       - DB_ENGINE=postgres
-      - POSTGRES_DB=civicsense_db
+      - POSTGRES_DB=urban_lens_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgrespassword
       - POSTGRES_HOST=db
@@ -46,7 +46,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: civicsense_frontend
+    container_name: urban_lens_frontend
     restart: always
     ports:
       - "3000:3000"

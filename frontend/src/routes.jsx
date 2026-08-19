@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import SubmitComplaint from './pages/SubmitComplaint';
 import AdminDashboard from './pages/AdminDashboard';
 import Analytics from './pages/Analytics';
+import Leaderboard from './pages/Leaderboard';
 import Loader from './components/Loader';
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
@@ -38,6 +39,14 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route
+        path="/leaderboard"
+        element={
+          <ProtectedRoute>
+            <Leaderboard />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Citizen Protected Routes */}
       <Route

@@ -85,4 +85,9 @@ export const complaintService = {
     const response = await api.get('/dashboard/officer/');
     return response.data;
   },
+
+  async getLeaderboard() {
+    const response = await api.get('/dashboard/leaderboard/');
+    return response.data;
+  },
 };

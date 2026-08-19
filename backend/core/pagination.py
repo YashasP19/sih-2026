@@ -1,5 +1,5 @@
 """
-Standardized Pagination for CivicSense AI APIs
+Standardized Pagination for Urban Lens APIs
 """
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response

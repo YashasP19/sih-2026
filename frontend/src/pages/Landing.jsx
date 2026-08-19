@@ -58,7 +58,7 @@ export default function Landing() {
 
         <div className="relative text-center animate-fade-up">
           <p className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-civic-ink">
-            CivicSense <span className="text-civic-teal">AI</span>
+            Urban Lens <span className="text-civic-teal">AI</span>
           </p>
           <h1 className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-civic-ink/90 max-w-3xl mx-auto leading-snug">
             Municipal grievances resolved with calm, accountable intelligence
@@ -116,7 +116,7 @@ export default function Landing() {
           <div className="text-center max-w-3xl mx-auto mb-14">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-civic-teal">Next-Gen Municipal Tech</p>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-civic-ink mt-2">
-              Why CivicSense AI outperforms traditional portals
+              Why Urban Lens outperforms traditional portals
             </h2>
             <p className="text-civic-mute mt-3 text-sm sm:text-base">
               Automated triage, duplicate suppression, and hazard detection — without the bureaucratic lag.
@@ -218,7 +218,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-civic-teal">Simple 4-Step Process</p>
-            <h2 className="font-display text-3xl font-bold text-civic-ink mt-2">How CivicSense AI resolves grievances</h2>
+            <h2 className="font-display text-3xl font-bold text-civic-ink mt-2">How Urban Lens resolves grievances</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

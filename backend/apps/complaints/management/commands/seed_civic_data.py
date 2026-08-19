@@ -7,4 +7,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         seed_database()
-        self.stdout.write(self.style.SUCCESS('Successfully seeded CivicSense AI platform data!'))
+        self.stdout.write(self.style.SUCCESS('Successfully seeded Urban Lens platform data!'))
