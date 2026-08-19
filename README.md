@@ -1,7 +1,13 @@
-# 🏛️ CivicSense AI: Next-Gen Civic Grievance Redressal & Municipal Transparency
+<div align="center">
 
-> **Built for Smart India Hackathon (SIH 2026)**  
-> *Transforming municipal governance with AI-driven triage, real-time priority scoring, geo-spatial duplicate suppression, and radical public transparency.*
+# 🏛️ CivicSense AI
+
+### Next-Gen Civic Grievance Redressal & Municipal Transparency Platform
+
+*Transforming municipal governance with AI-driven triage, real-time priority scoring,*  
+*geo-spatial duplicate suppression, and radical public transparency.*
+
+<br/>
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-5.0+-092E20?style=for-the-badge&logo=django&logoColor=white)](https://djangoproject.com)
@@ -10,59 +16,96 @@
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
----
+<br/>
 
-## 🌟 Key Highlights & Innovations
+> 🏆 **Built for Smart India Hackathon (SIH) 2026**
 
-1. **🧠 Real-Time NLP Auto-Triage & Category Prediction**:
-   - Probabilistic TF-IDF classifier trained on extensive civic lexicons automatically categorizes grievances (PWD Roads, Solid Waste, Electricity, Water Supply, Drainage, Public Safety) with >94% accuracy.
-2. **⚡ Dynamic Risk-Based Priority Engine**:
-   - Calculates 1–100 composite severity scores and Urgency Tiers (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`) factoring life-safety keyword triggers (e.g. exposed live cables, open manholes, hospital routes) and geo-spatial frequency clustering.
-3. **💬 Chatbot + Voice Complaint Intake**:
-   - Floating Civic Assist chatbot for guided filing & ticket tracking; browser speech-to-text (Speak mic) on the form and in chat.
-4. **🔔 Live Status Updates & Notifications**:
-   - Citizen dashboard auto-refreshes; bell inbox + toasts when ticket status or resolution changes.
-5. **📍 Geo-Spatial Duplicate & Spam Suppression**:
-   - Uses Haversine spherical distance combined with text vector cosine similarity to detect duplicate complaints within 500m radius, preventing departmental queue bloat.
-6. **🗺️ Interactive Ward-Level Problem Heatmaps & GPS Pinning**:
-   - Real-time Leaflet geo-mapping displaying neighborhood complaint density, photographic evidence, and click-to-pick GPS coordinates.
-7. **📊 Radical Public Transparency Dashboard**:
-   - Real-time open metrics: Total grievances, SLA turnaround times, department efficiency rankings, and 7-day velocity charts.
-8. **🎖️ Citizen Gamification & Civic Karma**:
-   - Verified grievance filers earn Civic Karma points, encouraging community civic participation.
+</div>
 
 ---
 
-## 🏗️ Clean Project Architecture
+## 📌 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Project Architecture](#-project-architecture)
+- [Quickstart Guide](#-quickstart-guide)
+- [Demo Credentials](#-demo-login-credentials)
+- [Docker Deployment](#-docker-deployment)
+- [Documentation](#-documentation)
+
+---
+
+## 🌐 Overview
+
+**CivicSense AI** is a full-stack intelligent civic grievance management system designed to bridge the gap between citizens and municipal authorities. By leveraging **Natural Language Processing**, **geo-spatial analytics**, and **real-time dashboards**, it enables:
+
+- 🧑‍💼 **Citizens** to file, track, and follow up on grievances seamlessly
+- 🏢 **Officers** to manage, prioritize, and resolve complaints efficiently
+- 📊 **Administrators** to gain city-wide insights and enforce SLA compliance
+
+---
+
+## ✨ Key Features
+
+| # | Feature | Description |
+|---|---------|-------------|
+| 1 | 🧠 **NLP Auto-Triage** | TF-IDF classifier categorizes grievances across 6 departments with **>94% accuracy** |
+| 2 | ⚡ **Dynamic Priority Engine** | Composite 1–100 severity scores with `CRITICAL` / `HIGH` / `MEDIUM` / `LOW` urgency tiers |
+| 3 | 💬 **AI Chatbot + Voice Intake** | Floating Civic Assist chatbot with browser speech-to-text for hands-free complaint filing |
+| 4 | 🔔 **Live Notifications** | Real-time bell inbox and toast alerts on every status/resolution change |
+| 5 | 📍 **Geo-Spatial Deduplication** | Haversine + cosine similarity to suppress duplicate complaints within a 500m radius |
+| 6 | 🗺️ **Interactive Heatmaps** | Ward-level Leaflet maps with complaint density, photo evidence & GPS pinning |
+| 7 | 📊 **Public Transparency Dashboard** | Open metrics: total grievances, SLA turnarounds, department efficiency rankings, 7-day charts |
+| 8 | 🎖️ **Civic Karma Gamification** | Verified filers earn Karma points to encourage active community participation |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Python 3.11, Django 5.0, Django REST Framework |
+| **Frontend** | React 18.3, Tailwind CSS 3.4, Axios |
+| **Mapping** | Leaflet.js 1.9 |
+| **AI / NLP** | Scikit-learn (TF-IDF), Haversine, Cosine Similarity |
+| **Auth** | JWT (SimpleJWT), Role-Based Access Control (RBAC) |
+| **Database** | SQLite (dev) / PostgreSQL (production-ready) |
+| **DevOps** | Docker, Docker Compose |
+
+---
+
+## 🏗️ Project Architecture
 
 ```
-├── backend/                     # Django REST Backend
-│   ├── grievance_system/        # Main project config (settings, urls, wsgi, asgi)
+sih-2026/
+├── backend/                        # Django REST API
+│   ├── grievance_system/           # Project config (settings, urls, wsgi, asgi)
 │   ├── apps/
-│   │   ├── users/               # Custom User model, JWT Auth & RBAC
-│   │   ├── complaints/          # Complaint CRUD, Service Layer, Audit Logs
-│   │   ├── ai_module/           # NLP Classifier, Priority Engine, Duplicate Detection
-│   │   └── dashboard/           # Analytics, Aggregations & Public Transparency
-│   ├── core/                    # Common constants, permissions, exceptions, pagination
-│   ├── seed_data.py             # Realistic SIH demonstration seeder script
-│   ├── requirements.txt         # Dependencies
+│   │   ├── users/                  # Custom User model, JWT Auth & RBAC
+│   │   ├── complaints/             # Complaint CRUD, Service Layer, Audit Logs
+│   │   ├── ai_module/              # NLP Classifier, Priority Engine, Deduplication
+│   │   └── dashboard/              # Analytics, Aggregations & Transparency Metrics
+│   ├── core/                       # Shared constants, permissions, exceptions
+│   ├── seed_data.py                # Demo data seeder for SIH evaluation
+│   ├── requirements.txt
 │   └── manage.py
 │
-├── frontend/                    # React 18 + Tailwind CSS + Leaflet Frontend
-│   ├── src/
-│   │   ├── components/          # Glassmorphic UI, Heatmap, MapComponent, Badges, Modals
-│   │   ├── pages/               # Landing, Login, Signup, Citizen Dashboard, Submit, Admin, Analytics
-│   │   ├── services/            # Axios API client, Auth & Complaint services
-│   │   ├── context/             # AuthContext, ThemeContext (Dark/Light), NotificationContext
-│   │   └── routes.jsx           # Role-based protected routes
-│   └── package.json
+├── frontend/                       # React 18 + Tailwind + Leaflet
+│   └── src/
+│       ├── components/             # Glassmorphic UI, Maps, Badges, Modals
+│       ├── pages/                  # Landing, Login, Dashboard, Submit, Admin, Analytics
+│       ├── services/               # Axios API client, Auth & Complaint services
+│       ├── context/                # AuthContext, ThemeContext, NotificationContext
+│       └── routes.jsx              # Role-based protected routes
 │
-├── docs/                        # Complete SIH Documentation
-│   ├── SRS.md                   # Software Requirements Specification
-│   ├── API_Documentation.md     # Full REST API Reference
-│   └── Setup_Guide.md           # Local & Cloud Setup Guide
+├── docs/                           # SIH Evaluation Documentation
+│   ├── SRS.md                      # Software Requirements Specification
+│   ├── API_Documentation.md        # Full REST API Reference
+│   └── Setup_Guide.md              # Local & Cloud Setup Guide
 │
-├── docker-compose.yml           # Full-stack Container Orchestration
+├── docker-compose.yml              # Full-stack container orchestration
 └── README.md
 ```
 
@@ -70,28 +113,40 @@
 
 ## 🚀 Quickstart Guide
 
-Login only works when **both** servers are running. Seed demo users once, then leave the backend terminal open.
+> ⚠️ **Both servers must be running simultaneously.** Seed demo data once, then keep both terminals open.
 
-### 1. Backend Setup (Terminal 1 — keep this running)
+### Step 1 — Backend Setup (Terminal 1)
 
 ```bash
 cd backend
+
+# Create and activate virtual environment
 python -m venv venv
-# Windows: .\venv\Scripts\Activate
-# Linux/Mac: source venv/bin/activate
+source venv/bin/activate        # Linux / macOS
+# .\venv\Scripts\Activate       # Windows
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Apply migrations
 python manage.py makemigrations users complaints ai_module dashboard
 python manage.py migrate
+
+# Seed demo data (creates all demo users & sample grievances)
 python seed_data.py
+
+# Start the backend server
 python manage.py runserver 8000
 ```
 
-Backend API: **`http://127.0.0.1:8000`**  
-Login endpoint: `POST /api/v1/auth/login/`
+✅ Backend API running at: **`http://127.0.0.1:8000`**  
+📡 Auth endpoint: `POST /api/v1/auth/login/`
 
-If demo login fails after a fresh DB, re-run `python seed_data.py` (resets demo passwords).
+> **Tip:** If demo login fails after a fresh DB, re-run `python seed_data.py` to reset demo passwords.
 
-### 2. Frontend Setup (Terminal 2)
+---
+
+### Step 2 — Frontend Setup (Terminal 2)
 
 ```bash
 cd frontend
@@ -99,38 +154,52 @@ npm install
 npm run dev
 ```
 
-Open **`http://localhost:3000`** in your browser, then use the demo credentials below.
+✅ Frontend running at: **`http://localhost:3000`**
 
 ---
 
 ## 🔑 Demo Login Credentials
 
-Created by `python seed_data.py`. Use the **SIH Demo Instant Login** chips on the Login page, or enter manually:
+> Generated by `python seed_data.py`. Use the **SIH Demo Instant Login** chips on the Login page, or enter manually:
 
-| Role | Username | Password | Access Level |
-|---|---|---|---|
-| **Super Admin** | `admin` | `Admin@123` | City-wide oversight & Executive KPIs |
-| **PWD Roads Officer** | `officer_roads` | `Officer@123` | Roads & Infrastructure Queue |
-| **Sanitation Officer** | `officer_sanitation` | `Officer@123` | Solid Waste & Cleanliness Queue |
-| **Electricity Officer**| `officer_power` | `Officer@123` | Electrical Hazards & Streetlighting Queue |
-| **Active Citizen** | `arun_citizen` | `Citizen@123` | Lodges grievances & tracks status |
+| Role | Username | Password | Access |
+|------|----------|----------|--------|
+| 🔴 **Super Admin** | `admin` | `Admin@123` | City-wide oversight & Executive KPIs |
+| 🟠 **PWD Roads Officer** | `officer_roads` | `Officer@123` | Roads & Infrastructure queue |
+| 🟡 **Sanitation Officer** | `officer_sanitation` | `Officer@123` | Solid Waste & Cleanliness queue |
+| 🟢 **Electricity Officer** | `officer_power` | `Officer@123` | Electrical Hazards & Streetlighting queue |
+| 🔵 **Active Citizen** | `arun_citizen` | `Citizen@123` | Lodge grievances & track status |
 
-**Common login failure:** Frontend is open but backend was stopped. Restart Terminal 1 with `python manage.py runserver 8000`.
+> **New users:** Register with a valid email (`name@example.com`), a password of at least 6 characters, and a unique username. Accounts are active immediately after signup.
 
-**New user registration:** Use a valid email (`name@example.com`), password with at least 6 characters, and a unique username. Every registered member is stored in `backend/db.sqlite3` and can sign in immediately after signup.
 ---
 
 ## 🐳 Docker Deployment
+
+Spin up the entire stack (backend + frontend + DB) with a single command:
 
 ```bash
 docker-compose up --build
 ```
 
+> Ensure Docker Desktop is running before executing the above command.
+
 ---
 
-## 📜 SIH Presentation & Evaluation
+## 📜 Documentation
 
-Refer to the `/docs/` folder for comprehensive Hackathon evaluation documents:
-- [Software Requirements Specification (SRS.md)](file:///Users/yashas/sih-2026/docs/SRS.md)
-- [REST API Reference (API_Documentation.md)](file:///Users/yashas/sih-2026/docs/API_Documentation.md)
-- [Local & Production Setup Guide (Setup_Guide.md)](file:///Users/yashas/sih-2026/docs/Setup_Guide.md)
+Comprehensive evaluation documents are available in the [`/docs`](./docs/) folder:
+
+| Document | Description |
+|----------|-------------|
+| 📄 [SRS.md](./docs/SRS.md) | Software Requirements Specification |
+| 📡 [API_Documentation.md](./docs/API_Documentation.md) | Complete REST API Reference |
+| ⚙️ [Setup_Guide.md](./docs/Setup_Guide.md) | Local & Production Deployment Guide |
+
+---
+
+<div align="center">
+
+Made with ❤️ for **Smart India Hackathon 2026**
+
+</div>
