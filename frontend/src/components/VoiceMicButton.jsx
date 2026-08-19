@@ -7,7 +7,7 @@ import { useSpeechToText } from '../hooks/useSpeechToText';
  * @param {(updater: (prev: string) => string) => void} onTranscript
  */
 export default function VoiceMicButton({ onTranscript, className = '', title = 'Speak your complaint' }) {
-  const { listening, supported, error, toggle, stop, clearError } = useSpeechToText({ lang: 'en-IN' });
+  const { listening, supported, error, toggle, stop, clearError } = useSpeechToText();
 
   const handleClick = () => {
     if (!supported) return;
@@ -27,7 +27,7 @@ export default function VoiceMicButton({ onTranscript, className = '', title = '
       <button
         type="button"
         disabled
-        title="Voice input needs Chrome or Edge"
+        title="Voice input is not supported in this browser"
         className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-civic-line text-civic-mute bg-civic-sand opacity-60 cursor-not-allowed ${className}`}
       >
         <MicOff className="w-3.5 h-3.5" />

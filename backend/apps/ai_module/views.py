@@ -1,15 +1,61 @@
 """
 AI Module API Views for real-time analysis and duplicate checking
 """
+import tempfile
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from rest_framework.parsers import MultiPartParser
 from apps.ai_module.classifier import ComplaintClassifier
 from apps.ai_module.priority import PriorityScorer
 from apps.ai_module.similarity import DuplicateDetector
 from apps.ai_module.utils import extract_keywords
 from apps.complaints.models import Complaint
 from core.constants import CATEGORY_TO_DEPARTMENT, STATUS_RESOLVED, STATUS_REJECTED
+
+_whisper_model = None
+
+
+def _get_whisper_model():
+    """Lazily load the faster-whisper model (loaded once per worker process)."""
+    global _whisper_model
+    if _whisper_model is None:
+        from faster_whisper import WhisperModel
+        _whisper_model = WhisperModel('tiny', device='cpu', compute_type='int8')
+    return _whisper_model
+
+
+class TranscribeAudioView(APIView):
+    """Speech-to-text for the voice-input mic button, using a local Whisper model."""
+    permission_classes = [permissions.AllowAny]
+    parser_classes = [MultiPartParser]
+
+    def post(self, request):
+        audio_file = request.FILES.get('audio')
+        if not audio_file:
+            return Response(
+                {'success': False, 'message': 'Audio file required.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        suffix = '.' + audio_file.name.rsplit('.', 1)[-1] if '.' in audio_file.name else '.webm'
+        with tempfile.NamedTemporaryFile(suffix=suffix) as tmp:
+            for chunk in audio_file.chunks():
+                tmp.write(chunk)
+            tmp.flush()
+
+            try:
+                model = _get_whisper_model()
+                segments, _info = model.transcribe(tmp.name, language='en')
+                text = ' '.join(segment.text.strip() for segment in segments).strip()
+            except Exception as exc:
+                return Response(
+                    {'success': False, 'message': f'Transcription failed: {exc}'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+        return Response({'success': True, 'text': text}, status=status.HTTP_200_OK)
 
 
 class RealtimeAIAnalysisView(APIView):

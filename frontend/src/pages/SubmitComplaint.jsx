@@ -137,8 +137,8 @@ export default function SubmitComplaint() {
   const handleLocationSelect = (lat, lon) => {
     setFormData((prev) => ({
       ...prev,
-      latitude: lat,
-      longitude: lon,
+      latitude: Number(lat.toFixed(7)),
+      longitude: Number(lon.toFixed(7)),
     }));
   };
 

@@ -1,20 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-
-function friendlySpeechError(code) {
-  const map = {
-    'not-allowed':
-      'Microphone blocked. Allow mic for this site, or open the app at http://localhost:3000 (not a network IP).',
-    'service-not-allowed':
-      'Speech service blocked. Use Chrome/Edge at http://localhost:3000 and allow the microphone.',
-    'audio-capture': 'No microphone found. Plug in a mic and try again.',
-    'network': 'Speech service needs network access. Check your internet connection.',
-    'no-speech': 'No speech detected. Click Speak and try again.',
-    aborted: null,
-    'language-not-supported': 'This language is not supported. Try again in English.',
-  };
-  if (code in map) return map[code];
-  return code ? `Voice error: ${code}` : 'Could not start voice input.';
-}
+import { useCallback, useRef, useState } from 'react';
+import api from '../services/api';
 
 function isSecureForMic() {
   if (typeof window === 'undefined') return false;
@@ -23,152 +8,100 @@ function isSecureForMic() {
   return host === 'localhost' || host === '127.0.0.1';
 }
 
-async function ensureMicPermission() {
-  if (!navigator.mediaDevices?.getUserMedia) {
-    throw new Error('not-allowed');
-  }
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  stream.getTracks().forEach((t) => t.stop());
-}
-
 /**
- * Browser Web Speech API (Chrome/Edge).
+ * Records mic audio with MediaRecorder and sends it to the backend
+ * (faster-whisper) for transcription — works in any browser, any language
+ * the model supports, no reliance on the flaky Web Speech API.
  */
-export function useSpeechToText({ lang = 'en-IN', continuous = true } = {}) {
+export function useSpeechToText() {
   const [listening, setListening] = useState(false);
-  const [supported, setSupported] = useState(true);
+  const [supported] = useState(
+    typeof window !== 'undefined' && !!(window.MediaRecorder && navigator.mediaDevices?.getUserMedia)
+  );
   const [error, setError] = useState(null);
-  const recognitionRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const chunksRef = useRef([]);
   const onResultRef = useRef(null);
-  const intentionalStopRef = useRef(false);
+  const streamRef = useRef(null);
 
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setSupported(false);
-      return undefined;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = lang;
-    recognition.continuous = continuous;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event) => {
-      let finalChunk = '';
-      let interimChunk = '';
-      for (let i = event.resultIndex; i < event.results.length; i += 1) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) finalChunk += transcript;
-        else interimChunk += transcript;
-      }
-      if (onResultRef.current) {
-        onResultRef.current({
-          finalText: finalChunk,
-          interimText: interimChunk,
-          isFinal: Boolean(finalChunk),
-        });
-      }
-    };
-
-    recognition.onerror = (event) => {
-      const code = event.error || '';
-      // aborted / no-speech are common when stopping — don't scare the user
-      if (code === 'aborted' || (code === 'no-speech' && intentionalStopRef.current)) {
-        setListening(false);
-        return;
-      }
-      const msg = friendlySpeechError(code);
-      if (msg) setError(msg);
-      setListening(false);
-    };
-
-    recognition.onend = () => {
-      setListening(false);
-      intentionalStopRef.current = false;
-    };
-
-    recognitionRef.current = recognition;
-    return () => {
-      try {
-        recognition.stop();
-      } catch {
-        /* ignore */
-      }
-    };
-  }, [lang, continuous]);
+  const cleanupStream = () => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+  };
 
   const start = useCallback(async (onResult) => {
     setError(null);
     onResultRef.current = onResult;
-    intentionalStopRef.current = false;
 
     if (!isSecureForMic()) {
-      setError(
-        'Voice needs a secure page. Open http://localhost:3000 (not http://192.x.x.x or a LAN IP).'
-      );
+      setError('Voice needs a secure page. Open http://localhost:3000 (not http://192.x.x.x or a LAN IP).');
       return;
     }
-
-    const recognition = recognitionRef.current;
-    if (!recognition) {
-      setError('Speech recognition is not supported. Use Chrome or Edge.');
+    if (!supported) {
+      setError('Voice recording is not supported in this browser.');
       return;
     }
 
     try {
-      await ensureMicPermission();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      chunksRef.current = [];
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = async () => {
+        cleanupStream();
+        setListening(false);
+        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' });
+        chunksRef.current = [];
+        if (blob.size < 1000) return; // essentially empty recording
+
+        try {
+          const formData = new FormData();
+          formData.append('audio', blob, 'speech.webm');
+          const res = await api.post('/ai/transcribe/', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          });
+          const text = res.data?.text?.trim();
+          if (text && onResultRef.current) {
+            onResultRef.current({ finalText: text, interimText: '', isFinal: true });
+          } else if (!text) {
+            setError('No speech detected. Click Speak and try again.');
+          }
+        } catch (e) {
+          setError(e.response?.data?.message || 'Could not transcribe audio. Check your connection.');
+        }
+      };
+
+      recorder.start();
+      setListening(true);
     } catch (e) {
       const name = e?.name || '';
       if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
-        setError(friendlySpeechError('not-allowed'));
+        setError('Microphone blocked. Allow mic access for this site.');
       } else if (name === 'NotFoundError') {
-        setError(friendlySpeechError('audio-capture'));
+        setError('No microphone found. Plug in a mic and try again.');
       } else {
-        setError(friendlySpeechError('not-allowed'));
+        setError('Could not start microphone.');
       }
       setListening(false);
-      return;
     }
-
-    try {
-      recognition.start();
-      setListening(true);
-    } catch (e) {
-      // Already started — restart cleanly
-      if (String(e?.message || e).toLowerCase().includes('already')) {
-        try {
-          recognition.stop();
-          setTimeout(() => {
-            try {
-              recognition.start();
-              setListening(true);
-            } catch (err) {
-              setError(err.message || 'Could not start microphone');
-              setListening(false);
-            }
-          }, 200);
-          return;
-        } catch {
-          /* fall through */
-        }
-      }
-      setError(e.message || 'Could not start microphone');
-      setListening(false);
-    }
-  }, []);
+  }, [supported]);
 
   const stop = useCallback(() => {
-    intentionalStopRef.current = true;
-    const recognition = recognitionRef.current;
-    if (!recognition) return;
-    try {
-      recognition.stop();
-    } catch {
-      /* ignore */
+    const recorder = mediaRecorderRef.current;
+    if (recorder && recorder.state !== 'inactive') {
+      recorder.stop();
+    } else {
+      cleanupStream();
+      setListening(false);
     }
-    setListening(false);
   }, []);
 
   const toggle = useCallback(

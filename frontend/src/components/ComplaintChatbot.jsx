@@ -40,6 +40,72 @@ export default function ComplaintChatbot() {
   const [mode, setMode] = useState('idle'); // idle | file_desc | file_loc | file_confirm | track_id
   const [draft, setDraft] = useState({ description: '', address: '', title: '', analysis: null });
   const endRef = useRef(null);
+  const panelRef = useRef(null);
+  const launcherRef = useRef(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [launcherOffset, setLauncherOffset] = useState({ x: 0, y: 0 });
+  const dragStateRef = useRef(null);
+  const rafRef = useRef(null);
+
+  const makeDragHandlers = (elRef, offset, setOffset, { onClick } = {}) => {
+    const move = (e) => {
+      if (!dragStateRef.current) return;
+      const { pointerId, startX, startY, originX, originY } = dragStateRef.current;
+      if (e.pointerId !== undefined && e.pointerId !== pointerId) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragStateRef.current.moved = true;
+
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        let nextX = originX + dx;
+        let nextY = originY + dy;
+        const el = elRef.current;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const minX = -(rect.left - originX) + 8;
+          const maxX = window.innerWidth - (rect.right - originX) - 8;
+          const minY = -(rect.top - originY) + 8;
+          const maxY = window.innerHeight - (rect.bottom - originY) - 8;
+          nextX = Math.min(Math.max(nextX, minX), maxX);
+          nextY = Math.min(Math.max(nextY, minY), maxY);
+        }
+        setOffset({ x: nextX, y: nextY });
+      });
+    };
+
+    const end = (e) => {
+      if (!dragStateRef.current) return;
+      const moved = dragStateRef.current.moved;
+      elRef.current?.releasePointerCapture?.(dragStateRef.current.pointerId);
+      dragStateRef.current = null;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', end);
+      if (!moved && onClick) onClick(e);
+    };
+
+    const start = (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      dragStateRef.current = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        originX: offset.x,
+        originY: offset.y,
+        moved: false,
+      };
+      elRef.current?.setPointerCapture?.(e.pointerId);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', end);
+    };
+
+    return { onPointerDown: start };
+  };
+
+  const panelDrag = makeDragHandlers(panelRef, dragOffset, setDragOffset);
+  const launcherDrag = makeDragHandlers(launcherRef, launcherOffset, setLauncherOffset, {
+    onClick: () => setOpen(true),
+  });
 
   useEffect(() => {
     if (open && messages.length === 0) {
@@ -301,10 +367,12 @@ export default function ComplaintChatbot() {
     <>
       {!open && (
         <button
+          ref={launcherRef}
           type="button"
-          onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-civic-teal text-white shadow-lift hover:scale-105 transition-transform dark:bg-teal-600"
-          aria-label="Open CivicSense chatbot"
+          {...launcherDrag}
+          style={{ transform: `translate(${launcherOffset.x}px, ${launcherOffset.y}px)`, touchAction: 'none' }}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-civic-teal text-white shadow-lift hover:scale-105 transition-transform cursor-grab active:cursor-grabbing dark:bg-teal-600"
+          aria-label="Open CivicSense chatbot (drag to move)"
         >
           <MessageCircle className="w-5 h-5" />
           <span className="text-sm font-bold hidden sm:inline">Civic Assist</span>
@@ -312,14 +380,22 @@ export default function ComplaintChatbot() {
       )}
 
       {open && (
-        <div className="fixed bottom-4 right-4 z-50 w-[min(100vw-1.5rem,380px)] h-[min(72vh,560px)] flex flex-col rounded-3xl border border-civic-line bg-white shadow-lift overflow-hidden dark:bg-civic-night-paper dark:border-civic-night-line">
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-civic-teal to-civic-teal-dark text-white">
+        <div
+          ref={panelRef}
+          style={{ transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)` }}
+          className="fixed bottom-4 right-4 z-50 w-[min(100vw-1.5rem,380px)] h-[min(72vh,560px)] flex flex-col rounded-3xl border border-civic-line bg-white shadow-lift overflow-hidden dark:bg-civic-night-paper dark:border-civic-night-line"
+        >
+          <div
+            {...panelDrag}
+            style={{ touchAction: 'none' }}
+            className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-civic-teal to-civic-teal-dark text-white cursor-grab active:cursor-grabbing select-none"
+          >
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5" />
               <div>
                 <p className="text-sm font-bold leading-tight">CivicSense Assist</p>
                 <p className="text-[10px] opacity-90 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> File · Track · AI triage
+                  <Sparkles className="w-3 h-3" /> File · Track · AI triage · drag to move
                 </p>
               </div>
             </div>
