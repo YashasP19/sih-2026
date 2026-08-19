@@ -22,8 +22,8 @@ export default function Sidebar({ role = 'CITIZEN' }) {
 
   const officerLinks = [
     { to: '/admin-dashboard', label: 'Department Queue', icon: LayoutDashboard },
-    { to: '/analytics', label: 'Performance Analytics', icon: BarChart3 },
-    { to: '/submit', label: 'File New Incident', icon: PlusCircle },
+    { to: '/performance', label: 'Performance Analytics', icon: BarChart3 },
+    { to: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   ];
 
   const links = isOfficerOrAdmin ? officerLinks : citizenLinks;

@@ -10,6 +10,7 @@ import SubmitComplaint from './pages/SubmitComplaint';
 import AdminDashboard from './pages/AdminDashboard';
 import Analytics from './pages/Analytics';
 import Leaderboard from './pages/Leaderboard';
+import PerformanceAnalytics from './pages/PerformanceAnalytics';
 import Loader from './components/Loader';
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
@@ -72,6 +73,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={['OFFICER', 'ADMIN']}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/performance"
+        element={
+          <ProtectedRoute allowedRoles={['OFFICER', 'ADMIN']}>
+            <PerformanceAnalytics />
           </ProtectedRoute>
         }
       />
