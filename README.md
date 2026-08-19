@@ -198,8 +198,3 @@ Comprehensive evaluation documents are available in the [`/docs`](./docs/) folde
 
 ---
 
-<div align="center">
-
-Made with ❤️ for **Smart India Hackathon 2026**
-
-</div>
