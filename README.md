@@ -131,12 +131,6 @@ docker-compose up --build
 ## 📜 SIH Presentation & Evaluation
 
 Refer to the `/docs/` folder for comprehensive Hackathon evaluation documents:
-- [Software Requirements Specification (SRS.md)](file:///c:/Users/Keval/OneDrive/Desktop/SIH%202026/docs/SRS.md)
-- [REST API Reference (API_Documentation.md)](file:///c:/Users/Keval/OneDrive/Desktop/SIH%202026/docs/API_Documentation.md)
-- [Local & Production Setup Guide (Setup_Guide.md)](file:///c:/Users/Keval/OneDrive/Desktop/SIH%202026/docs/Setup_Guide.md)
-
----
-
-## 👩‍💻 Creator
-
-**YAMINI PARMAR · BTECH-IT**
+- [Software Requirements Specification (SRS.md)](file:///Users/yashas/sih-2026/docs/SRS.md)
+- [REST API Reference (API_Documentation.md)](file:///Users/yashas/sih-2026/docs/API_Documentation.md)
+- [Local & Production Setup Guide (Setup_Guide.md)](file:///Users/yashas/sih-2026/docs/Setup_Guide.md)
