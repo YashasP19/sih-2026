@@ -73,7 +73,7 @@ export default function Dashboard() {
 
         <PageTransition className="flex-1 space-y-6">
           {/* Top Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-teal-soft to-white border border-civic-teal/25">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-teal-soft to-white dark:from-teal-950/40 dark:to-civic-night-paper border border-civic-teal/25">
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-extrabold text-civic-ink">Citizen Redressal Dashboard</h1>
@@ -118,7 +118,7 @@ export default function Dashboard() {
             </Card>
 
             <Card className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-500/20">
+              <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
@@ -271,7 +271,7 @@ export default function Dashboard() {
 
             {/* Resolution Proof if resolved */}
             {selectedComplaint.status === 'RESOLVED' && (
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2 dark:bg-emerald-950/40 dark:border-emerald-800">
                 <div className="flex items-center gap-1.5 text-emerald-600 font-bold">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Field Resolution Report</span>
@@ -296,7 +296,7 @@ export default function Dashboard() {
                 <div className={`p-2 rounded-lg font-bold border ${selectedComplaint.status === 'IN_PROGRESS' || selectedComplaint.status === 'RESOLVED' ? 'bg-civic-teal-soft text-civic-teal border-civic-teal/30' : 'bg-civic-sand text-civic-mute border-civic-line'}`}>
                   3. Field Action
                 </div>
-                <div className={`p-2 rounded-lg font-bold border ${selectedComplaint.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-civic-sand text-civic-mute border-civic-line'}`}>
+                <div className={`p-2 rounded-lg font-bold border ${selectedComplaint.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800' : 'bg-civic-sand text-civic-mute border-civic-line'}`}>
                   4. Resolved
                 </div>
               </div>

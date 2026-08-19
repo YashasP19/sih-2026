@@ -26,7 +26,7 @@ export default function PriorityBadge({ urgency, score }) {
       {getIcon()}
       <span>{config.label}</span>
       {score !== undefined && (
-        <span className="ml-1 px-1.5 py-0.5 rounded-md bg-white/80 text-[10px] text-civic-ink border border-civic-line">
+        <span className="ml-1 px-1.5 py-0.5 rounded-md bg-white/80 text-[10px] text-civic-ink border border-civic-line dark:bg-civic-night-paper/80 dark:text-slate-100 dark:border-civic-night-line">
           {score}
         </span>
       )}

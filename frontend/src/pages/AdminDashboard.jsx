@@ -152,7 +152,7 @@ export default function AdminDashboard() {
 
         <PageTransition className="flex-1 space-y-6">
           {/* Header Banner */}
-          <div className="p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-sand via-white to-civic-teal-soft border border-civic-teal/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-6 rounded-3xl glass-panel bg-gradient-to-r from-civic-sand via-white to-civic-teal-soft dark:from-slate-800 dark:via-civic-night-paper dark:to-teal-950/40 border border-civic-teal/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
                 <ShieldAlert className="w-6 h-6 text-civic-teal" />
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
 
           {/* Critical Emergency Ticker */}
           {criticalComplaints.length > 0 && (
-            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between gap-3 animate-pulse-slow">
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between gap-3 animate-pulse-slow dark:bg-rose-950/40 dark:border-rose-800">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-rose-600 text-white">
                   <Flame className="w-5 h-5" />
@@ -313,7 +313,7 @@ export default function AdminDashboard() {
                       </div>
 
                       {item.is_duplicate && (
-                        <span className="inline-flex px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-bold text-[10px] border border-amber-200">
+                        <span className="inline-flex px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-bold text-[10px] border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800">
                           DUPLICATE REPORT
                         </span>
                       )}
@@ -376,7 +376,7 @@ export default function AdminDashboard() {
               <div className="p-3 rounded-xl bg-civic-sand col-span-2"><span className="text-civic-mute block">Address</span><strong>{selectedComplaint.address || 'Not provided'}</strong></div>
             </div>
             {selectedComplaint.resolution_notes && (
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800">
                 <p className="text-xs font-bold text-emerald-700 uppercase mb-1">Official Solution</p>
                 <p className="text-sm text-emerald-800">{selectedComplaint.resolution_notes}</p>
               </div>

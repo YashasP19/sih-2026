@@ -73,7 +73,7 @@ export default function Analytics() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold mb-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold mb-3 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300">
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>Radical Municipal Transparency Portal</span>
         </div>

@@ -394,7 +394,7 @@ export default function SubmitComplaint() {
               <div className="mt-4 space-y-4 animate-fade-in text-xs">
                 {/* Duplicate Alert */}
                 {aiAnalysis.duplicate_check?.is_duplicate && (
-                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-300">
                     <div className="flex items-center gap-1.5 font-bold mb-1">
                       <AlertTriangle className="w-4 h-4 text-amber-400" />
                       <span>Possible Duplicate Grievance Detected</span>

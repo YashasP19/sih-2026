@@ -47,12 +47,12 @@
 @layer components {
   .surface {
     @apply bg-white/90 border border-civic-line/80 shadow-soft backdrop-blur-sm
-      dark:bg-civic-night-paper/90 dark:border-civic-night-line/80 dark:shadow-soft-dark;
+      dark:bg-white/[0.06] dark:border-white/10 dark:backdrop-blur-xl dark:shadow-soft-dark;
   }
 
   .surface-strong {
     @apply bg-white border border-civic-line shadow-soft
-      dark:bg-civic-night-paper dark:border-civic-night-line dark:shadow-soft-dark;
+      dark:bg-white/[0.08] dark:border-white/10 dark:backdrop-blur-xl dark:shadow-soft-dark;
   }
 
   .btn-primary {
@@ -76,17 +76,17 @@
 
   .glass-panel {
     @apply bg-white/90 border border-civic-line/80 shadow-soft backdrop-blur-md
-      dark:bg-civic-night-paper/90 dark:border-civic-night-line/80 dark:shadow-soft-dark;
+      dark:bg-white/[0.06] dark:border-white/10 dark:backdrop-blur-xl dark:shadow-soft-dark;
   }
 
   .glass-card {
     @apply bg-white border border-civic-line/70 shadow-soft transition-all duration-300
-      dark:bg-civic-night-paper dark:border-civic-night-line/70 dark:shadow-soft-dark;
+      dark:bg-white/[0.06] dark:border-white/10 dark:backdrop-blur-xl dark:shadow-soft-dark;
   }
 
   .glass-card:hover {
     @apply border-civic-teal/35 shadow-lift -translate-y-0.5
-      dark:border-teal-500/35 dark:shadow-lift-dark;
+      dark:border-teal-500/35 dark:bg-white/[0.09] dark:shadow-lift-dark;
   }
 
   .theme-text {

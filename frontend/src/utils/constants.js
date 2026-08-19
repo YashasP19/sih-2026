@@ -18,18 +18,18 @@ export const CATEGORIES = [
 ];
 
 export const STATUS_TYPES = {
-  PENDING: { label: 'Pending Review', bg: 'bg-amber-50 text-amber-700 border-amber-200' },
-  VERIFIED: { label: 'AI Verified', bg: 'bg-sky-50 text-sky-700 border-sky-200' },
-  IN_PROGRESS: { label: 'In Progress', bg: 'bg-civic-teal-soft text-civic-teal-dark border-civic-teal/25' },
-  RESOLVED: { label: 'Resolved', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  REJECTED: { label: 'Rejected', bg: 'bg-rose-50 text-rose-700 border-rose-200' },
+  PENDING: { label: 'Pending Review', bg: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800' },
+  VERIFIED: { label: 'AI Verified', bg: 'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/40 dark:text-sky-300 dark:border-sky-800' },
+  IN_PROGRESS: { label: 'In Progress', bg: 'bg-civic-teal-soft text-civic-teal-dark border-civic-teal/25 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800' },
+  RESOLVED: { label: 'Resolved', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800' },
+  REJECTED: { label: 'Rejected', bg: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800' },
 };
 
 export const URGENCY_LEVELS = {
-  CRITICAL: { label: 'Critical', bg: 'bg-rose-50 text-rose-700 border-rose-200 animate-pulse' },
-  HIGH: { label: 'High Urgency', bg: 'bg-orange-50 text-orange-700 border-orange-200' },
-  MEDIUM: { label: 'Medium', bg: 'bg-amber-50 text-amber-700 border-amber-200' },
-  LOW: { label: 'Low', bg: 'bg-slate-50 text-slate-600 border-slate-200' },
+  CRITICAL: { label: 'Critical', bg: 'bg-rose-50 text-rose-700 border-rose-200 animate-pulse dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800' },
+  HIGH: { label: 'High Urgency', bg: 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800' },
+  MEDIUM: { label: 'Medium', bg: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800' },
+  LOW: { label: 'Low', bg: 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' },
 };
 
 export const DEPARTMENTS = [

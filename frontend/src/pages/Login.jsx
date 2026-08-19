@@ -88,7 +88,7 @@ export default function Login() {
 
         <div className="p-8 rounded-3xl surface-strong">
           {errorMessage && (
-            <div className="mb-6 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            <div className="mb-6 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-300">
               {errorMessage}
             </div>
           )}

@@ -60,7 +60,7 @@ export default function Landing() {
           <p className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-civic-ink">
             Urban Lens <span className="text-civic-teal">AI</span>
           </p>
-          <h1 className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-civic-ink/90 max-w-3xl mx-auto leading-snug">
+          <h1 className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-civic-ink/90 dark:text-slate-100/90 max-w-3xl mx-auto leading-snug">
             Municipal grievances resolved with calm, accountable intelligence
           </h1>
           <p className="mt-4 text-base sm:text-lg text-civic-mute max-w-2xl mx-auto leading-relaxed">

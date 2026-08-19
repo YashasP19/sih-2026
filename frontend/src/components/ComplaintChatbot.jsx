@@ -49,52 +49,77 @@ export default function ComplaintChatbot() {
 
   const makeDragHandlers = (elRef, offset, setOffset, { onClick } = {}) => {
     const move = (e) => {
-      if (!dragStateRef.current) return;
-      const { pointerId, startX, startY, originX, originY } = dragStateRef.current;
+      const state = dragStateRef.current;
+      if (!state || state.el !== elRef.current) return;
+      const { pointerId, startX, startY, originX, originY, bounds } = state;
       if (e.pointerId !== undefined && e.pointerId !== pointerId) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragStateRef.current.moved = true;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) state.moved = true;
 
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      let nextX = originX + dx;
+      let nextY = originY + dy;
+      if (bounds) {
+        nextX = Math.min(Math.max(nextX, bounds.minX), bounds.maxX);
+        nextY = Math.min(Math.max(nextY, bounds.minY), bounds.maxY);
+      }
+      state.liveX = nextX;
+      state.liveY = nextY;
+
+      if (rafRef.current) return;
       rafRef.current = requestAnimationFrame(() => {
-        let nextX = originX + dx;
-        let nextY = originY + dy;
+        rafRef.current = null;
         const el = elRef.current;
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const minX = -(rect.left - originX) + 8;
-          const maxX = window.innerWidth - (rect.right - originX) - 8;
-          const minY = -(rect.top - originY) + 8;
-          const maxY = window.innerHeight - (rect.bottom - originY) - 8;
-          nextX = Math.min(Math.max(nextX, minX), maxX);
-          nextY = Math.min(Math.max(nextY, minY), maxY);
+        if (el && dragStateRef.current === state) {
+          el.style.transform = `translate(${state.liveX}px, ${state.liveY}px)`;
         }
-        setOffset({ x: nextX, y: nextY });
       });
     };
 
     const end = (e) => {
-      if (!dragStateRef.current) return;
-      const moved = dragStateRef.current.moved;
-      elRef.current?.releasePointerCapture?.(dragStateRef.current.pointerId);
+      const state = dragStateRef.current;
+      if (!state || state.el !== elRef.current) return;
+      const moved = state.moved;
+      elRef.current?.releasePointerCapture?.(state.pointerId);
       dragStateRef.current = null;
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', end);
-      if (!moved && onClick) onClick(e);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      if (moved) {
+        setOffset({ x: state.liveX, y: state.liveY });
+      } else if (onClick) {
+        onClick(e);
+      }
     };
 
     const start = (e) => {
       if (e.button !== undefined && e.button !== 0) return;
+      const el = elRef.current;
+      const rect = el?.getBoundingClientRect();
+      const bounds = rect
+        ? {
+            minX: -(rect.left - offset.x) + 8,
+            maxX: window.innerWidth - (rect.right - offset.x) - 8,
+            minY: -(rect.top - offset.y) + 8,
+            maxY: window.innerHeight - (rect.bottom - offset.y) - 8,
+          }
+        : null;
       dragStateRef.current = {
+        el,
         pointerId: e.pointerId,
         startX: e.clientX,
         startY: e.clientY,
         originX: offset.x,
         originY: offset.y,
+        liveX: offset.x,
+        liveY: offset.y,
+        bounds,
         moved: false,
       };
-      elRef.current?.setPointerCapture?.(e.pointerId);
+      el?.setPointerCapture?.(e.pointerId);
       window.addEventListener('pointermove', move);
       window.addEventListener('pointerup', end);
     };
@@ -370,7 +395,7 @@ export default function ComplaintChatbot() {
           ref={launcherRef}
           type="button"
           {...launcherDrag}
-          style={{ transform: `translate(${launcherOffset.x}px, ${launcherOffset.y}px)`, touchAction: 'none' }}
+          style={{ transform: `translate(${launcherOffset.x}px, ${launcherOffset.y}px)`, touchAction: 'none', willChange: 'transform' }}
           className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-civic-teal text-white shadow-lift hover:scale-105 transition-transform cursor-grab active:cursor-grabbing dark:bg-teal-600"
           aria-label="Open Urban Lens chatbot (drag to move)"
         >
@@ -382,7 +407,7 @@ export default function ComplaintChatbot() {
       {open && (
         <div
           ref={panelRef}
-          style={{ transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)` }}
+          style={{ transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)`, willChange: 'transform' }}
           className="fixed bottom-4 right-4 z-50 w-[min(100vw-1.5rem,380px)] h-[min(72vh,560px)] flex flex-col rounded-3xl border border-civic-line bg-white shadow-lift overflow-hidden dark:bg-civic-night-paper dark:border-civic-night-line"
         >
           <div
@@ -399,7 +424,12 @@ export default function ComplaintChatbot() {
                 </p>
               </div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} className="p-1.5 rounded-lg hover:bg-white/15">
+            <button
+              type="button"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => setOpen(false)}
+              className="p-1.5 rounded-lg hover:bg-white/15"
+            >
               <X className="w-4 h-4" />
             </button>
           </div>
