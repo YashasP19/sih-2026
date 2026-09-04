@@ -81,9 +81,15 @@ export default function Login() {
             <span>SIH Demo Instant Login</span>
           </div>
           <p className="text-[11px] text-civic-mute mb-2.5 leading-relaxed">
-            Requires backend at <span className="font-semibold text-civic-ink">http://127.0.0.1:8000</span>. Keep{' '}
-            <code className="font-mono text-[10px] bg-civic-sand px-1 py-0.5 rounded">python manage.py runserver 8000</code> running in{' '}
-            <code className="font-mono text-[10px] bg-civic-sand px-1 py-0.5 rounded">backend/</code>.
+            {import.meta.env.DEV ? (
+              <>
+                Requires the backend running locally. Keep{' '}
+                <code className="font-mono text-[10px] bg-civic-sand px-1 py-0.5 rounded">python manage.py runserver 8000</code> running in{' '}
+                <code className="font-mono text-[10px] bg-civic-sand px-1 py-0.5 rounded">backend/</code>.
+              </>
+            ) : (
+              'One click signs you in as that role and drops you straight into its workspace.'
+            )}
           </p>
           <div className="grid grid-cols-3 gap-2 text-xs">
             {DEMO_ACCOUNTS.map((account, index) => (

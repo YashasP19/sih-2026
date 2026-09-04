@@ -45,7 +45,9 @@ export function truncate(text, max = 100) {
  */
 export function parseApiError(error, fallback = 'Something went wrong. Please try again.') {
   if (!error?.response) {
-    return 'Cannot reach the API server. Start the backend with: python manage.py runserver 8000';
+    return import.meta.env.DEV
+      ? 'Cannot reach the API server. Start the backend with: python manage.py runserver 8000'
+      : 'Could not reach the server. It may be waking up from idle — please retry in a few seconds.';
   }
 
   const data = error.response.data;
