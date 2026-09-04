@@ -18,6 +18,7 @@ from apps.innovation.models import (
     InnovationProject,
     ProjectMilestone,
     SupportOffer,
+    StudentContribution,
 )
 from apps.innovation.services import ChallengeRoutingService, InnovationProjectService
 from core.constants import (
@@ -296,14 +297,35 @@ class Command(BaseCommand):
         self.stdout.write(f"  Routed {count} challenge(s) to institutions")
         return count
 
+    # Challenges deliberately left unclaimed so a coordinator logging in during
+    # a live demo always has something in their queue to claim.
+    RESERVE_UNCLAIMED = 2
+
     def _seed_projects(self, target_count, partners):
         """Builds demo projects at varied lifecycle stages for the dashboards."""
-        candidates = list(
+        available = list(
             Complaint.objects.filter(
                 routed_university__isnull=False,
                 innovation_projects__isnull=True,
-            ).order_by('-priority_score')[:target_count]
+            ).order_by('-priority_score')
         )
+
+        # Prefer reserving challenges routed to an institution that actually has
+        # a coordinator login, otherwise the reserve is invisible in the demo.
+        reserved_ids = set()
+        if len(available) > self.RESERVE_UNCLAIMED:
+            for challenge in reversed(available):
+                if len(reserved_ids) >= self.RESERVE_UNCLAIMED:
+                    break
+                if challenge.routed_university.coordinators.exists():
+                    reserved_ids.add(challenge.id)
+
+        candidates = [c for c in available if c.id not in reserved_ids][:target_count]
+
+        if reserved_ids:
+            self.stdout.write(
+                f"  Reserved {len(reserved_ids)} unclaimed challenge(s) for the live demo queue"
+            )
 
         if not candidates:
             self.stdout.write(self.style.WARNING(
@@ -312,10 +334,13 @@ class Command(BaseCommand):
             ))
             return
 
+        # Front-loaded so that even a small seed (few challenges available)
+        # still produces DEPLOYED projects — otherwise the government analytics
+        # dashboard reports zero social outcome, which is the whole pitch.
         stages = [
-            PROJECT_APPROVED, PROJECT_IN_PROGRESS, PROJECT_IN_PROGRESS,
-            PROJECT_PROTOTYPE, PROJECT_PROTOTYPE, PROJECT_TESTING,
-            PROJECT_DEPLOYED, PROJECT_DEPLOYED,
+            PROJECT_DEPLOYED, PROJECT_IN_PROGRESS, PROJECT_PROTOTYPE,
+            PROJECT_DEPLOYED, PROJECT_TESTING, PROJECT_IN_PROGRESS,
+            PROJECT_PROTOTYPE, PROJECT_APPROVED,
         ]
 
         for index, challenge in enumerate(candidates):
@@ -343,6 +368,8 @@ class Command(BaseCommand):
             self._seed_milestones(project, stage)
             InnovationProjectService.update_status(project, stage)
             self._seed_support(project, partners, index)
+            self._seed_outcomes(project, stage, index)
+            self._seed_contributions(project, stage)
 
             self.stdout.write(f"  + {project.code} {project.title[:50]}... [{stage}]")
 
@@ -395,3 +422,59 @@ class Command(BaseCommand):
             offer.status = SUPPORT_ACCEPTED
             offer.responded_at = timezone.now()
             offer.save(update_fields=['status', 'responded_at'])
+
+    # Deployment impact and IP outcomes — without these the government
+    # analytics dashboard reports a real pipeline but zero social outcome.
+    IMPACT_PROFILES = [
+        dict(people_benefited=4200, villages_covered=6, solution_cost=185000,
+             patent_filed=True,
+             patent_details='IN-2026-004412: Low-cost bio-sand filtration unit',
+             startup_created=False, startup_name=''),
+        dict(people_benefited=2750, villages_covered=4, solution_cost=142000,
+             patent_filed=False, patent_details='',
+             startup_created=True,
+             startup_name='AgriSoil Diagnostics (student startup)'),
+    ]
+
+    CONTRIBUTION_ROLES = [
+        ('Lead Researcher', 4,
+         'Designed the study, ran the field survey and authored the final technical report.'),
+        ('Field Data Collection', 3,
+         'Collected and validated on-site samples and geo-tagged readings across affected wards.'),
+        ('Prototype & Testing', 3,
+         'Built the working prototype and ran the validation cycles before deployment.'),
+    ]
+
+    def _seed_outcomes(self, project, stage, index):
+        """Records measured community impact + academic credit on a project."""
+        fields = []
+
+        if stage == PROJECT_DEPLOYED:
+            for key, value in self.IMPACT_PROFILES[index % len(self.IMPACT_PROFILES)].items():
+                setattr(project, key, value)
+                fields.append(key)
+
+        if stage in (PROJECT_DEPLOYED, PROJECT_TESTING, PROJECT_PROTOTYPE):
+            project.academic_credits = 6 if stage == PROJECT_DEPLOYED else 4
+            project.counts_as_capstone = stage == PROJECT_DEPLOYED
+            project.counts_as_internship = True
+            fields += ['academic_credits', 'counts_as_capstone', 'counts_as_internship']
+
+        if fields:
+            project.save(update_fields=fields)
+
+    def _seed_contributions(self, project, stage):
+        """Per-student credit ledger backing the NEP 2020 Student Innovation Record."""
+        if project.student_contributions.exists():
+            return
+
+        credit_scale = 1 if stage in (PROJECT_DEPLOYED, PROJECT_TESTING, PROJECT_PROTOTYPE) else 0
+        for i, student in enumerate(project.student_members or []):
+            role, credits, summary = self.CONTRIBUTION_ROLES[i % len(self.CONTRIBUTION_ROLES)]
+            StudentContribution.objects.create(
+                project=project,
+                student_name=student,
+                role=role,
+                contribution_summary=summary,
+                credits_earned=credits if credit_scale else 2,
+            )
