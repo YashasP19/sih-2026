@@ -418,7 +418,10 @@ class Command(BaseCommand):
         )
 
         # Accept most offers so funding/engagement analytics are non-empty.
-        if index % 2 == 0:
+        # Funding offers are always accepted, otherwise "total funding committed"
+        # can compute to zero on a small seed. Non-funding offers stay mixed so a
+        # coordinator still has a pending offer to accept during a live demo.
+        if index % 2 == 0 or support_type == SUPPORT_FUNDING:
             offer.status = SUPPORT_ACCEPTED
             offer.responded_at = timezone.now()
             offer.save(update_fields=['status', 'responded_at'])
