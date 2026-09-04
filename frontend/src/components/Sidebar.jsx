@@ -7,12 +7,16 @@ import {
   ShieldCheck,
   Award,
   Trophy,
+  GraduationCap,
+  Briefcase,
+  Lightbulb,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 export default function Sidebar({ role = 'CITIZEN' }) {
   const { user } = useAuth();
-  const isOfficerOrAdmin = user?.role === 'OFFICER' || user?.role === 'ADMIN';
+  const activeRole = user?.role || role;
+  const isOfficerOrAdmin = activeRole === 'OFFICER' || activeRole === 'ADMIN';
 
   const citizenLinks = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -23,10 +27,27 @@ export default function Sidebar({ role = 'CITIZEN' }) {
   const officerLinks = [
     { to: '/admin-dashboard', label: 'Department Queue', icon: LayoutDashboard },
     { to: '/performance', label: 'Performance Analytics', icon: BarChart3 },
+    { to: '/innovation-analytics', label: 'Innovation Outcomes', icon: Lightbulb },
     { to: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   ];
 
-  const links = isOfficerOrAdmin ? officerLinks : citizenLinks;
+  const universityLinks = [
+    { to: '/university', label: 'Innovation Desk', icon: GraduationCap },
+    { to: '/innovation-analytics', label: 'Ecosystem Analytics', icon: Lightbulb },
+    { to: '/student-record', label: 'Student Records', icon: Award },
+  ];
+
+  const industryLinks = [
+    { to: '/industry', label: 'Partnership Portal', icon: Briefcase },
+    { to: '/innovation-analytics', label: 'Ecosystem Analytics', icon: Lightbulb },
+  ];
+
+  const linksByRole = {
+    UNIVERSITY: universityLinks,
+    INDUSTRY: industryLinks,
+  };
+
+  const links = linksByRole[activeRole] || (isOfficerOrAdmin ? officerLinks : citizenLinks);
 
   return (
     <aside className="w-80 flex-shrink-0 hidden lg:block">

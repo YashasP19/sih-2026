@@ -1,8 +1,8 @@
 import React from 'react';
 import { STATUS_TYPES } from '../utils/constants';
 
-export default function StatusBadge({ status, size = 'sm' }) {
-  const config = STATUS_TYPES[status] || { label: status, bg: 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
+export default function StatusBadge({ status, size = 'sm', types = STATUS_TYPES }) {
+  const config = types[status] || { label: status, bg: 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
 
   const sizeClasses = size === 'xs' 
     ? 'px-2 py-0.5 text-xs' 

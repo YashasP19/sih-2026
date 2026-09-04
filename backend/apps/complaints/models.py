@@ -12,7 +12,9 @@ from core.constants import (
     STATUS_PENDING,
     URGENCY_CHOICES,
     URGENCY_MEDIUM,
-    DEPT_GENERAL
+    DEPT_GENERAL,
+    DOMAIN_CHOICES,
+    DOMAIN_OTHER
 )
 
 
@@ -156,6 +158,23 @@ class Complaint(models.Model):
         blank=True,
         related_name='assigned_complaints',
         help_text="Field Officer assigned to resolve this"
+    )
+
+    # Societal Innovation Routing (SIH26043 layer)
+    domain = models.CharField(
+        max_length=30,
+        choices=DOMAIN_CHOICES,
+        default=DOMAIN_OTHER,
+        db_index=True,
+        help_text="Academic thematic domain, derived from the AI category"
+    )
+    routed_university = models.ForeignKey(
+        'innovation.University',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='routed_challenges',
+        help_text="HEI this challenge was routed to for innovation-driven resolution"
     )
 
     # Duplicate Detection Link

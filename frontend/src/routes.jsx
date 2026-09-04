@@ -11,6 +11,12 @@ import AdminDashboard from './pages/AdminDashboard';
 import Analytics from './pages/Analytics';
 import Leaderboard from './pages/Leaderboard';
 import PerformanceAnalytics from './pages/PerformanceAnalytics';
+import UniversityDashboard from './pages/UniversityDashboard';
+import IndustryPortal from './pages/IndustryPortal';
+import ProjectDetail from './pages/ProjectDetail';
+import InnovationAnalytics from './pages/InnovationAnalytics';
+import StudentRecord from './pages/StudentRecord';
+import ChallengeTimeline from './pages/ChallengeTimeline';
 import Loader from './components/Loader';
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
@@ -40,6 +46,9 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route path="/innovation-analytics" element={<InnovationAnalytics />} />
+      <Route path="/student-record" element={<StudentRecord />} />
+      <Route path="/challenge/:id/timeline" element={<ChallengeTimeline />} />
       <Route
         path="/leaderboard"
         element={
@@ -63,6 +72,32 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <SubmitComplaint />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Societal Innovation Collaboration Routes */}
+      <Route
+        path="/university"
+        element={
+          <ProtectedRoute allowedRoles={['UNIVERSITY', 'ADMIN']}>
+            <UniversityDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/industry"
+        element={
+          <ProtectedRoute allowedRoles={['INDUSTRY', 'ADMIN']}>
+            <IndustryPortal />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project/:id"
+        element={
+          <ProtectedRoute>
+            <ProjectDetail />
           </ProtectedRoute>
         }
       />

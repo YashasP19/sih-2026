@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.complaints.apps.ComplaintsConfig',
     'apps.ai_module.apps.AiModuleConfig',
     'apps.dashboard.apps.DashboardConfig',
+    'apps.innovation.apps.InnovationConfig',
 ]
 
 MIDDLEWARE = [

@@ -26,3 +26,11 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Uploaded media (test/demo artifacts, not source)
+media/
+backend/media/
+
+# Local demo prep — presenter notes, not part of the deliverable
+demo_script.md
+JUDGE_QA_PREP.md

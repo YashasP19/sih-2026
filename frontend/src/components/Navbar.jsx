@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import ThemeToggle from './ThemeToggle';
 import NotificationBell from './NotificationBell';
 import {
-  ShieldAlert,
+  Lightbulb,
   PlusCircle,
   BarChart3,
   LayoutDashboard,
@@ -13,6 +13,17 @@ import {
   X,
   Award,
 } from 'lucide-react';
+
+const WORKSPACE_PATHS = {
+  OFFICER: '/admin-dashboard',
+  ADMIN: '/admin-dashboard',
+  UNIVERSITY: '/university',
+  INDUSTRY: '/industry',
+};
+
+function workspacePathFor(role) {
+  return WORKSPACE_PATHS[role] || '/dashboard';
+}
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -56,14 +67,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300 ${logoBg}`}>
-              <ShieldAlert className={`w-5 h-5 ${logoIconColor}`} />
+              <Lightbulb className={`w-5 h-5 ${logoIconColor}`} />
             </div>
             <div>
               <div className="flex items-baseline gap-1">
                 <span className={`font-display text-lg font-bold tracking-tight ${textColor}`}>Urban Lens</span>
-                <span className="font-display text-lg font-bold text-civic-teal dark:text-teal-400">AI</span>
               </div>
-              <p className={`text-[9px] tracking-[0.14em] font-semibold uppercase ${mutedColor}`}>Smart Civic Redressal</p>
+              <p className={`text-[9px] tracking-[0.14em] font-semibold uppercase ${mutedColor}`}>Innovation Collaboration Portal</p>
             </div>
           </Link>
 
@@ -82,11 +92,18 @@ export default function Navbar() {
               <BarChart3 className="w-4 h-4" />
               <span>Transparency</span>
             </Link>
+            <Link
+              to="/innovation-analytics"
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${textColor} ${hoverBg} ${isActive('/innovation-analytics') ? 'bg-civic-teal-soft text-civic-teal-dark' : ''}`}
+            >
+              <Lightbulb className="w-4 h-4" />
+              <span>Innovation</span>
+            </Link>
             {user && (
               <Link
-                to={user.role === 'OFFICER' || user.role === 'ADMIN' ? '/admin-dashboard' : '/dashboard'}
+                to={workspacePathFor(user.role)}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${textColor} ${hoverBg} ${
-                  isActive('/dashboard') || isActive('/admin-dashboard') ? 'bg-civic-teal-soft text-civic-teal-dark' : ''
+                  isActive(workspacePathFor(user.role)) ? 'bg-civic-teal-soft text-civic-teal-dark' : ''
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -147,7 +164,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm bg-civic-teal text-white hover:bg-civic-teal-dark dark:bg-teal-600 dark:hover:bg-teal-500"
+                  className="px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm bg-civic-ink text-civic-mist hover:opacity-90 dark:bg-slate-100 dark:text-civic-night"
                 >
                   Sign Up
                 </Link>
@@ -178,14 +195,17 @@ export default function Navbar() {
           <Link to="/analytics" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-xl text-sm font-medium text-civic-ink hover:bg-civic-sand dark:text-slate-100 dark:hover:bg-slate-800">
             Public Transparency
           </Link>
-          <Link to="/submit" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-xl text-sm font-semibold bg-civic-teal text-white text-center dark:bg-teal-600">
-            File Grievance
+          <Link to="/innovation-analytics" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-xl text-sm font-medium text-civic-ink hover:bg-civic-sand dark:text-slate-100 dark:hover:bg-slate-800">
+            Innovation Outcomes
+          </Link>
+          <Link to="/submit" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-xl text-sm font-semibold bg-civic-ink text-civic-mist text-center dark:bg-slate-100 dark:text-civic-night">
+            Report a Challenge
           </Link>
 
           {user ? (
             <div className="pt-4 border-t border-civic-line dark:border-civic-night-line">
               <Link
-                to={user.role === 'OFFICER' || user.role === 'ADMIN' ? '/admin-dashboard' : '/dashboard'}
+                to={workspacePathFor(user.role)}
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-xl text-sm font-semibold text-civic-teal hover:bg-civic-sand dark:text-teal-400 dark:hover:bg-slate-800"
               >
@@ -203,7 +223,7 @@ export default function Navbar() {
               <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="flex-1 py-2 text-center text-sm font-semibold bg-civic-sand text-civic-ink rounded-xl dark:bg-slate-800 dark:text-slate-100">
                 Log In
               </Link>
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="flex-1 py-2 text-center text-sm font-semibold bg-civic-teal text-white rounded-xl dark:bg-teal-600">
+              <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="flex-1 py-2 text-center text-sm font-semibold bg-civic-ink text-civic-mist rounded-xl dark:bg-slate-100 dark:text-civic-night">
                 Sign Up
               </Link>
             </div>

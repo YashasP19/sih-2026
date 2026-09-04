@@ -7,7 +7,7 @@ export default function Footer() {
         © 2026 Urban Lens · Smart India Hackathon 2026
       </p>
       <p className="mt-2 text-sm font-bold tracking-wide text-civic-ink dark:text-slate-100">
-        Committed to Better Cities · CODE COMMITERS
+        Connecting Citizens, Universities & Industry · CODE COMMITERS
       </p>
     </footer>
   );

@@ -152,7 +152,29 @@ class ComplaintService:
             remarks='AI auto-verified category, department routing, and priority score.',
         )
 
-        # Step 8: Reward Citizen Civic Points
+        # Step 8: Route to a Higher Education Institution for innovation-driven
+        # resolution. Failure here must not block grievance intake, so an
+        # unrouted challenge simply awaits manual allocation by an admin.
+        try:
+            from apps.innovation.services import ChallengeRoutingService
+            university = ChallengeRoutingService.route_challenge(complaint)
+            ComplaintActivityLog.objects.create(
+                complaint=complaint,
+                performed_by=None,
+                action='ROUTED_TO_HEI',
+                remarks=(
+                    f"Domain classified as {complaint.get_domain_display()}. "
+                    + (
+                        f"Routed to {university} for academic evaluation."
+                        if university else
+                        "No matching institution available; awaiting manual allocation."
+                    )
+                ),
+            )
+        except Exception as e:
+            logger.warning(f"HEI routing failed for {complaint.ticket_id}: {e}")
+
+        # Step 9: Reward Citizen Civic Points
         citizen.civic_points += 10
         citizen.save(update_fields=['civic_points'])
 

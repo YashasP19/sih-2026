@@ -15,14 +15,15 @@ from rest_framework.response import Response
 def api_root_view(request):
     """API health check and directory index."""
     return Response({
-        'platform': 'Urban Lens - Civic Grievance Redressal & Transparency Platform',
-        'version': '1.0.0',
+        'platform': 'Urban Lens - Societal Innovation Collaboration Portal',
+        'version': '2.0.0',
         'status': 'ONLINE',
         'endpoints': {
             'auth': '/api/v1/auth/',
             'complaints': '/api/v1/complaints/',
             'ai_nlp': '/api/v1/ai/',
             'dashboard_analytics': '/api/v1/dashboard/',
+            'innovation': '/api/v1/innovation/',
             'admin_panel': '/admin/',
         }
     })
@@ -40,6 +41,7 @@ urlpatterns = [
     path('api/v1/complaints/', include('apps.complaints.urls', namespace='complaints')),
     path('api/v1/ai/', include('apps.ai_module.urls', namespace='ai_module')),
     path('api/v1/dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
+    path('api/v1/innovation/', include('apps.innovation.urls', namespace='innovation')),
 ]
 
 # Serve media files (needed for complaint photos in production too)

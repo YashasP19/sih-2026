@@ -4,29 +4,29 @@
 
 @layer base {
   :root {
-    --civic-bg: #EAF1F4;
-    --civic-paper: #ffffff;
-    --civic-ink: #0B2434;
-    --civic-mute: #5A7383;
-    --civic-line: #C9D8E0;
-    --civic-teal: #0D7377;
+    --civic-bg: #F8F5EE;
+    --civic-paper: #FFFCF6;
+    --civic-ink: #1C1C1C;
+    --civic-mute: #6B6459;
+    --civic-line: #E3DCC9;
+    --civic-teal: #C1694F;
   }
 
   .dark {
-    --civic-bg: #0B1620;
-    --civic-paper: #111F2E;
-    --civic-ink: #EAF1F4;
-    --civic-mute: #8BA3B3;
-    --civic-line: #1E3344;
-    --civic-teal: #14A3A8;
+    --civic-bg: #17140F;
+    --civic-paper: #201C17;
+    --civic-ink: #F8F5EE;
+    --civic-mute: #B8AC98;
+    --civic-line: #3A322A;
+    --civic-teal: #D0876C;
   }
 
   body {
     @apply bg-civic-mist text-civic-ink font-sans antialiased dark:bg-civic-night dark:text-slate-100;
     background-image:
-      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(13, 115, 119, 0.12), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(11, 36, 52, 0.06), transparent 50%),
-      linear-gradient(180deg, #EAF1F4 0%, #F4F8FA 40%, #EAF1F4 100%);
+      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(193, 105, 79, 0.10), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(28, 28, 28, 0.05), transparent 50%),
+      linear-gradient(180deg, #F8F5EE 0%, #FBF8F1 40%, #F8F5EE 100%);
     background-attachment: fixed;
     min-height: 100vh;
     transition: background-color 0.25s ease, color 0.25s ease;
@@ -34,13 +34,23 @@
 
   .dark body {
     background-image:
-      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(13, 115, 119, 0.18), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(20, 163, 168, 0.08), transparent 50%),
-      linear-gradient(180deg, #0B1620 0%, #0F1C28 40%, #0B1620 100%);
+      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(193, 105, 79, 0.16), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(208, 135, 108, 0.08), transparent 50%),
+      linear-gradient(180deg, #17140F 0%, #1B1712 40%, #17140F 100%);
   }
 
   h1, h2, h3, .font-display {
-    font-family: Fraunces, Georgia, serif;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -56,12 +66,12 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-civic-teal px-5 py-3 text-sm font-bold text-white shadow-lift transition-all duration-300 hover:bg-civic-teal-dark hover:-translate-y-0.5
-      dark:bg-teal-600 dark:hover:bg-teal-500 dark:shadow-lift-dark;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-civic-ink px-5 py-3 text-sm font-bold text-civic-mist shadow-lift transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5
+      dark:bg-slate-100 dark:text-civic-night dark:hover:opacity-90 dark:shadow-lift-dark;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-civic-line bg-white/80 px-5 py-3 text-sm font-semibold text-civic-ink transition-all duration-300 hover:border-civic-teal/40 hover:bg-civic-teal-soft/50
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-civic-line bg-civic-sand/80 px-5 py-3 text-sm font-semibold text-civic-ink transition-all duration-300 hover:border-civic-teal/40 hover:bg-civic-teal-soft/50
       dark:border-civic-night-line dark:bg-civic-night-paper/80 dark:text-slate-100 dark:hover:border-teal-500/40 dark:hover:bg-teal-950/40;
   }
 
@@ -148,28 +158,28 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(201, 216, 224, 0.4);
+  background: rgba(227, 220, 201, 0.4);
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: rgba(30, 51, 68, 0.6);
+  background: rgba(58, 50, 42, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(90, 115, 131, 0.45);
+  background: rgba(107, 100, 89, 0.45);
   border-radius: 9999px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(139, 163, 179, 0.45);
+  background: rgba(184, 172, 152, 0.45);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(13, 115, 119, 0.7);
+  background: rgba(193, 105, 79, 0.7);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 163, 168, 0.7);
+  background: rgba(208, 135, 108, 0.7);
 }
 
 /* Leaflet Map overrides */
@@ -181,24 +191,24 @@
 }
 
 .leaflet-popup-content-wrapper {
-  background: #ffffff !important;
-  color: #0B2434 !important;
+  background: #FFFCF6 !important;
+  color: #1C1C1C !important;
   border-radius: 0.75rem !important;
-  border: 1px solid #C9D8E0;
-  box-shadow: 0 20px 25px -5px rgba(11, 36, 52, 0.15) !important;
+  border: 1px solid #E3DCC9;
+  box-shadow: 0 20px 25px -5px rgba(28, 28, 28, 0.15) !important;
 }
 
 .dark .leaflet-popup-content-wrapper {
-  background: #111F2E !important;
-  color: #EAF1F4 !important;
-  border: 1px solid #1E3344;
+  background: #201C17 !important;
+  color: #F8F5EE !important;
+  border: 1px solid #3A322A;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.45) !important;
 }
 
 .leaflet-popup-tip {
-  background: #ffffff !important;
+  background: #FFFCF6 !important;
 }
 
 .dark .leaflet-popup-tip {
-  background: #111F2E !important;
+  background: #201C17 !important;
 }

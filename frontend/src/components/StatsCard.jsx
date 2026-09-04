@@ -9,6 +9,8 @@ export default function StatsCard({ title, value, subtitle, icon: Icon, trend, c
     rose: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800',
     purple: 'bg-civic-teal-soft text-civic-teal-dark border-civic-teal/25 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800',
     teal: 'bg-civic-teal-soft text-civic-teal-dark border-civic-teal/25 dark:bg-teal-950/40 dark:text-teal-300 dark:border-teal-800',
+    indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-800',
+    brown: 'bg-[#F3E3DC] text-[#6E3427] border-[#D0876C]/40 dark:bg-[#2E140F]/60 dark:text-[#E9C3B2] dark:border-[#8A4231]/50',
   };
 
   const accentMap = {
@@ -18,6 +20,8 @@ export default function StatsCard({ title, value, subtitle, icon: Icon, trend, c
     rose: 'bg-rose-500',
     purple: 'bg-civic-teal dark:bg-teal-500',
     teal: 'bg-civic-teal dark:bg-teal-500',
+    indigo: 'bg-indigo-500',
+    brown: 'bg-[#6E3427]',
   };
 
   const activeColor = colorMap[color] || colorMap.teal;

@@ -53,6 +53,22 @@ class User(AbstractUser):
         default=50,
         help_text="Civic reputation reward score earned for verified grievance reports"
     )
+    university = models.ForeignKey(
+        'innovation.University',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='coordinators',
+        help_text="Institution this coordinator represents (UNIVERSITY role)"
+    )
+    industry_partner = models.ForeignKey(
+        'innovation.IndustryPartner',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='representatives',
+        help_text="Partner organisation this user represents (INDUSTRY role)"
+    )
     is_verified = models.BooleanField(
         default=False,
         help_text="Indicates if officer or citizen identity is verified"
@@ -79,3 +95,11 @@ class User(AbstractUser):
     @property
     def is_admin_role(self):
         return self.role == 'ADMIN' or self.is_superuser
+
+    @property
+    def is_university(self):
+        return self.role == 'UNIVERSITY'
+
+    @property
+    def is_industry(self):
+        return self.role == 'INDUSTRY'

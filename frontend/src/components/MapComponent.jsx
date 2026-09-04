@@ -15,12 +15,12 @@ L.Icon.Default.mergeOptions({
 
 // Category colored custom markers
 const createCustomIcon = (urgency, category) => {
-  let color = '#3b82f6'; // default blue
+  let color = '#8F5C74'; // default plum
   if (urgency === 'CRITICAL') color = '#e11d48';
-  else if (urgency === 'HIGH') color = '#f97316';
-  else if (category === 'WASTE_GARBAGE') color = '#10b981';
-  else if (category === 'STREETLIGHT_POWER') color = '#eab308';
-  else if (category === 'ROADS_POTHOLES') color = '#f59e0b';
+  else if (urgency === 'HIGH') color = '#C1694F';
+  else if (category === 'WASTE_GARBAGE') color = '#8B5A34';
+  else if (category === 'STREETLIGHT_POWER') color = '#B99B62';
+  else if (category === 'ROADS_POTHOLES') color = '#A6543D';
 
   return L.divIcon({
     className: 'custom-map-pin',

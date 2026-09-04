@@ -5,6 +5,30 @@ import { useNotification } from '../context/NotificationContext';
 import { DEPARTMENTS } from '../utils/constants';
 import { ArrowRight } from 'lucide-react';
 
+const ROLE_OPTIONS = [
+  { id: 'CITIZEN', label: 'Citizen / Resident' },
+  { id: 'OFFICER', label: 'Government Department Officer' },
+  { id: 'UNIVERSITY', label: 'University / HEI' },
+  { id: 'INDUSTRY', label: 'Industry / Startup Partner' },
+];
+
+const POST_SIGNUP_REDIRECTS = {
+  OFFICER: '/admin-dashboard',
+  ADMIN: '/admin-dashboard',
+  UNIVERSITY: '/university',
+  INDUSTRY: '/industry',
+};
+
+const ORGANIZATION_LABELS = {
+  UNIVERSITY: 'Institution Name',
+  INDUSTRY: 'Company / Organisation Name',
+};
+
+const ORGANIZATION_PLACEHOLDERS = {
+  UNIVERSITY: 'e.g. BIT Sindri, Dhanbad',
+  INDUSTRY: 'e.g. Tata Steel Foundation',
+};
+
 export default function Signup() {
   const { register } = useAuth();
   const { addToast } = useNotification();
@@ -19,6 +43,7 @@ export default function Signup() {
     role: 'CITIZEN',
     department: 'GENERAL',
     ward_number: 'Ward 1',
+    organization_name: '',
     password: '',
     password_confirm: '',
   });
@@ -69,11 +94,7 @@ export default function Signup() {
 
     if (res.success) {
       addToast('Account created successfully! Welcome to Urban Lens.', 'success');
-      if (formData.role === 'OFFICER' || formData.role === 'ADMIN') {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/dashboard');
-      }
+      navigate(POST_SIGNUP_REDIRECTS[formData.role] || '/dashboard');
     } else {
       setErrorMessage(res.error || 'Registration failed. Please check inputs.');
       if (res.details && typeof res.details === 'object' && !Array.isArray(res.details)) {
@@ -111,28 +132,20 @@ export default function Signup() {
             <div>
               <label className="label-field">Select Account Role</label>
               <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'CITIZEN' })}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                    formData.role === 'CITIZEN'
-                      ? 'bg-civic-teal-soft border-civic-teal text-civic-teal-dark'
-                      : 'bg-white border-civic-line text-civic-mute hover:border-civic-teal/40'
-                  }`}
-                >
-                  Citizen / Resident
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, role: 'OFFICER' })}
-                  className={`p-3 rounded-xl border text-xs font-bold transition-all ${
-                    formData.role === 'OFFICER'
-                      ? 'bg-civic-teal-soft border-civic-teal text-civic-teal-dark'
-                      : 'bg-white border-civic-line text-civic-mute hover:border-civic-teal/40'
-                  }`}
-                >
-                  Municipal Department Officer
-                </button>
+                {ROLE_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, role: option.id })}
+                    className={`p-3 rounded-xl border text-xs font-bold transition-all ${
+                      formData.role === option.id
+                        ? 'bg-civic-teal-soft border-civic-teal text-civic-teal-dark'
+                        : 'bg-white border-civic-line text-civic-mute hover:border-civic-teal/40'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -151,6 +164,24 @@ export default function Signup() {
                     </option>
                   ))}
                 </select>
+              </div>
+            )}
+
+            {ORGANIZATION_LABELS[formData.role] && (
+              <div>
+                <label className="label-field">{ORGANIZATION_LABELS[formData.role]}</label>
+                <input
+                  type="text"
+                  name="organization_name"
+                  value={formData.organization_name}
+                  onChange={handleChange}
+                  required
+                  placeholder={ORGANIZATION_PLACEHOLDERS[formData.role]}
+                  className="input-field"
+                />
+                {fieldErrors.organization_name && (
+                  <p className="mt-1 text-[11px] text-rose-600">{fieldErrors.organization_name}</p>
+                )}
               </div>
             )}
 
