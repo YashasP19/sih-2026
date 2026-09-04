@@ -399,10 +399,15 @@ class Command(BaseCommand):
         if index % 3 == 2:
             return
 
+        # Funding first in the rotation so a small seed still produces two
+        # accepted grants; amounts are fixed rather than random so the headline
+        # "funding committed" figure is stable across redeploys and can be
+        # quoted in a demo script.
         support_types = [
-            SUPPORT_MENTORSHIP, SUPPORT_FUNDING,
-            SUPPORT_PROTOTYPING, SUPPORT_LAB_ACCESS,
+            SUPPORT_FUNDING, SUPPORT_MENTORSHIP,
+            SUPPORT_FUNDING, SUPPORT_LAB_ACCESS,
         ]
+        funding_amounts = [400000, 500000, 250000]
         support_type = support_types[index % len(support_types)]
         partner = partners[index % len(partners)]
 
@@ -414,7 +419,8 @@ class Command(BaseCommand):
                 f"{partner.name} offers {dict(SupportOffer._meta.get_field('support_type').choices)[support_type].lower()} "
                 f"towards this project under its community innovation programme."
             ),
-            amount=random.choice([150000, 250000, 500000]) if support_type == SUPPORT_FUNDING else None,
+            amount=(funding_amounts[index % len(funding_amounts)]
+                    if support_type == SUPPORT_FUNDING else None),
         )
 
         # Accept most offers so funding/engagement analytics are non-empty.
