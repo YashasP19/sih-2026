@@ -50,6 +50,11 @@ export const complaintService = {
     return response.data;
   },
 
+  async deleteComplaint(id) {
+    const response = await api.delete(`/complaints/${id}/delete/`);
+    return response.data;
+  },
+
   async claimComplaint(id) {
     const response = await api.post(`/complaints/${id}/claim/`);
     return response.data;

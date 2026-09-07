@@ -6,6 +6,7 @@ from apps.complaints.views import (
     ComplaintListCreateView,
     ComplaintDetailView,
     MyComplaintsView,
+    DeleteComplaintView,
     DepartmentComplaintsView,
     UpdateComplaintStatusView,
     ClaimComplaintView,
@@ -18,6 +19,7 @@ app_name = 'complaints'
 urlpatterns = [
     path('', ComplaintListCreateView.as_view(), name='complaint_list_create'),
     path('<int:pk>/', ComplaintDetailView.as_view(), name='complaint_detail'),
+    path('<int:pk>/delete/', DeleteComplaintView.as_view(), name='delete_complaint'),
     path('my/', MyComplaintsView.as_view(), name='my_complaints'),
     path('department-queue/', DepartmentComplaintsView.as_view(), name='department_queue'),
     path('<int:pk>/status/', UpdateComplaintStatusView.as_view(), name='update_status'),

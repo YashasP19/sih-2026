@@ -8,11 +8,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Check initial user from localStorage
+  const syncUserFromStorage = () => {
     const savedUser = authService.getCurrentUser();
     const token = localStorage.getItem('urbanlens_access_token');
-    
+
     if (savedUser && token) {
       setUser(savedUser);
       // Verify/Refresh profile in background
@@ -26,8 +25,25 @@ export const AuthProvider = ({ children }) => {
         })
         .finally(() => setLoading(false));
     } else {
+      setUser(null);
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    syncUserFromStorage();
+
+    // The browser can restore a fully-rendered snapshot of a logged-in page
+    // from bfcache when the user hits Back after logging out, without
+    // re-running any JS. Re-checking on pageshow catches that stale restore
+    // and drops back to the login screen instead of showing cached content.
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        syncUserFromStorage();
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
   }, []);
 
   const login = async (username, password) => {

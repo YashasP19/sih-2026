@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useNotification } from '../context/NotificationContext';
 import { complaintService } from '../services/complaintService';
 import Sidebar from '../components/Sidebar';
 import PageTransition from '../components/PageTransition';
@@ -23,16 +24,20 @@ import {
   ChevronRight,
   ThumbsUp,
   MapPin,
-  Camera
+  Camera,
+  GraduationCap,
+  Trash2
 } from 'lucide-react';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { addToast } = useNotification();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     loadComplaints(false);
@@ -52,6 +57,23 @@ export default function Dashboard() {
       if (!silent) setLoading(false);
     }
   };
+
+  const handleDelete = async (item) => {
+    if (!window.confirm(`Withdraw ticket ${item.ticket_id}? This can't be undone.`)) return;
+    setDeletingId(item.id);
+    try {
+      const res = await complaintService.deleteComplaint(item.id);
+      addToast(res?.message || 'Grievance withdrawn.', 'success');
+      setSelectedComplaint(null);
+      loadComplaints();
+    } catch (err) {
+      addToast(err?.response?.data?.message || 'Could not withdraw this grievance.', 'error');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const canDelete = (item) => !item.assigned_officer && item.status !== 'IN_PROGRESS' && item.status !== 'RESOLVED';
 
   const filteredComplaints = complaints.filter((item) => {
     const matchesStatus = statusFilter === 'ALL' || item.status === statusFilter;
@@ -193,6 +215,12 @@ export default function Dashboard() {
                         </span>
                         <StatusBadge status={item.status} />
                         <PriorityBadge urgency={item.urgency} score={item.priority_score} />
+                        {item.routed_university_name && (
+                          <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-civic-teal-soft text-civic-teal text-[11px] font-semibold border border-civic-teal/25">
+                            <GraduationCap className="w-3.5 h-3.5" />
+                            Routed to {item.routed_university_name}
+                          </span>
+                        )}
                       </div>
 
                       <h3 className="text-base font-bold text-civic-ink group-hover:text-civic-teal transition-colors">
@@ -223,7 +251,18 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="self-end sm:self-center">
+                    <div className="self-end sm:self-center flex items-center gap-2">
+                      {canDelete(item) && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
+                          disabled={deletingId === item.id}
+                          title="Withdraw grievance"
+                          className="p-2 rounded-xl bg-civic-sand text-civic-mute hover:bg-rose-100 hover:text-rose-600 transition-all disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                       <button className="p-2 rounded-xl bg-civic-sand group-hover:bg-civic-teal text-civic-mute group-hover:text-white transition-all">
                         <ChevronRight className="w-4 h-4" />
                       </button>
@@ -259,6 +298,19 @@ export default function Dashboard() {
                 {selectedComplaint.description}
               </p>
             </div>
+
+            {selectedComplaint.routed_university_name && (
+              <div className="p-4 rounded-xl bg-civic-teal-soft border border-civic-teal/25 flex items-start gap-2">
+                <GraduationCap className="w-4 h-4 text-civic-teal mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-civic-teal">Routed for Research & Fix</p>
+                  <p className="text-civic-ink font-semibold">{selectedComplaint.routed_university_name}</p>
+                  {selectedComplaint.domain_display && (
+                    <p className="text-civic-mute text-[11px] mt-0.5">Domain: {selectedComplaint.domain_display}</p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {selectedComplaint.image && (
               <div>
@@ -301,6 +353,20 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+
+            {canDelete(selectedComplaint) && (
+              <div className="pt-4 border-t border-civic-line">
+                <button
+                  type="button"
+                  onClick={() => handleDelete(selectedComplaint)}
+                  disabled={deletingId === selectedComplaint.id}
+                  className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-rose-200 text-rose-600 font-semibold hover:bg-rose-50 transition-all disabled:opacity-50"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {deletingId === selectedComplaint.id ? 'Withdrawing...' : 'Withdraw This Grievance'}
+                </button>
+              </div>
+            )}
           </div>
         </Modal>
       )}

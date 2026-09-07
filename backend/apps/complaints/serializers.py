@@ -29,8 +29,10 @@ class ComplaintListSerializer(serializers.ModelSerializer):
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     urgency_display = serializers.CharField(source='get_urgency_display', read_only=True)
     department_display = serializers.CharField(source='get_assigned_department_display', read_only=True)
+    domain_display = serializers.CharField(source='get_domain_display', read_only=True)
     citizen_name = serializers.SerializerMethodField()
     assigned_officer_name = serializers.SerializerMethodField()
+    routed_university_name = serializers.SerializerMethodField()
     is_user_upvoted = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,6 +44,7 @@ class ComplaintListSerializer(serializers.ModelSerializer):
             'latitude', 'longitude', 'address', 'landmark', 'ward_number', 'pincode',
             'image', 'assigned_department', 'department_display',
             'assigned_officer', 'assigned_officer_name',
+            'domain', 'domain_display', 'routed_university', 'routed_university_name',
             'resolution_notes', 'resolution_image',
             'upvotes_count', 'is_duplicate', 'citizen_name', 'is_user_upvoted',
             'created_at', 'updated_at', 'resolved_at'
@@ -54,6 +57,9 @@ class ComplaintListSerializer(serializers.ModelSerializer):
         if obj.assigned_officer:
             return obj.assigned_officer.get_full_name() or obj.assigned_officer.username
         return None
+
+    def get_routed_university_name(self, obj):
+        return obj.routed_university.name if obj.routed_university else None
 
     def get_is_user_upvoted(self, obj):
         request = self.context.get('request')
@@ -68,11 +74,13 @@ class ComplaintDetailSerializer(serializers.ModelSerializer):
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     urgency_display = serializers.CharField(source='get_urgency_display', read_only=True)
     department_display = serializers.CharField(source='get_assigned_department_display', read_only=True)
+    domain_display = serializers.CharField(source='get_domain_display', read_only=True)
     citizen = UserSerializer(read_only=True)
     assigned_officer = UserSerializer(read_only=True)
     activity_logs = ActivityLogSerializer(many=True, read_only=True)
     is_user_upvoted = serializers.SerializerMethodField()
     duplicate_of_ticket = serializers.CharField(source='duplicate_of.ticket_id', read_only=True)
+    routed_university_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Complaint
@@ -84,10 +92,14 @@ class ComplaintDetailSerializer(serializers.ModelSerializer):
             'address', 'landmark', 'ward_number', 'pincode',
             'image', 'resolution_image', 'resolution_notes',
             'assigned_department', 'department_display', 'assigned_officer',
+            'domain', 'domain_display', 'routed_university', 'routed_university_name',
             'is_duplicate', 'duplicate_of', 'duplicate_of_ticket',
             'keywords', 'upvotes_count', 'is_user_upvoted',
             'activity_logs', 'created_at', 'updated_at', 'resolved_at'
         ]
+
+    def get_routed_university_name(self, obj):
+        return obj.routed_university.name if obj.routed_university else None
 
     def get_is_user_upvoted(self, obj):
         request = self.context.get('request')

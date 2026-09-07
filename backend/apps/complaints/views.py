@@ -111,6 +111,37 @@ class MyComplaintsView(generics.ListAPIView):
         return Complaint.objects.filter(citizen=self.request.user).order_by('-created_at')
 
 
+class DeleteComplaintView(APIView):
+    """
+    Allows a citizen to withdraw their own grievance, as long as no
+    university project or department officer has already picked it up.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        complaint = generics.get_object_or_404(Complaint, pk=pk)
+
+        if complaint.citizen_id != request.user.id:
+            return Response({
+                'success': False,
+                'message': 'You can only delete grievances you filed yourself.'
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        if complaint.assigned_officer_id or complaint.innovation_projects.exists():
+            return Response({
+                'success': False,
+                'message': 'This grievance is already being worked on by a department officer or university, so it can no longer be withdrawn.'
+            }, status=status.HTTP_409_CONFLICT)
+
+        ticket_id = complaint.ticket_id
+        complaint.delete()
+
+        return Response({
+            'success': True,
+            'message': f'Ticket {ticket_id} withdrawn.'
+        }, status=status.HTTP_200_OK)
+
+
 class DepartmentComplaintsView(generics.ListAPIView):
     """
     List grievances relevant to the municipal officer's department or assigned queue.

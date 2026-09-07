@@ -423,15 +423,23 @@ export default function SubmitComplaint() {
                   <p className="text-[10px] text-civic-mute mt-0.5">Confidence: {Math.round(aiAnalysis.confidence * 100)}%</p>
                 </div>
 
-                {/* Matched University */}
-                {aiAnalysis.matched_university && (
-                  <div className="p-4 rounded-2xl bg-white border border-civic-line">
-                    <p className="text-civic-mute font-semibold text-[10px] uppercase">Matching Institution for Research & Fix</p>
-                    <p className="text-sm font-bold text-civic-teal mt-1">{aiAnalysis.matched_university}</p>
-                    {aiAnalysis.routing_reason && (
-                      <p className="text-[10px] text-civic-mute mt-0.5">{aiAnalysis.routing_reason}</p>
-                    )}
-                  </div>
+                {/* Matched University — only once an address has actually been entered,
+                    since routing depends on locality; showing it earlier would be misleading. */}
+                {formData.address.trim().length > 3 && (
+                  aiAnalysis.matched_university ? (
+                    <div className="p-4 rounded-2xl bg-white border border-civic-line">
+                      <p className="text-civic-mute font-semibold text-[10px] uppercase">Matching Institution for Research & Fix</p>
+                      <p className="text-sm font-bold text-civic-teal mt-1">{aiAnalysis.matched_university}</p>
+                      {aiAnalysis.routing_reason && (
+                        <p className="text-[10px] text-civic-mute mt-0.5">{aiAnalysis.routing_reason}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="p-4 rounded-2xl bg-white border border-civic-line">
+                      <p className="text-civic-mute font-semibold text-[10px] uppercase">Matching Institution for Research & Fix</p>
+                      <p className="text-[11px] text-civic-mute mt-1">No matching institution found for this location yet.</p>
+                    </div>
+                  )
                 )}
 
                 {/* Extracted Keywords */}
