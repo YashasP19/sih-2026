@@ -176,6 +176,38 @@ class UpdateComplaintStatusView(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class ClaimComplaintView(APIView):
+    """
+    Allows a department officer to self-assign an unclaimed grievance in
+    their own department, instead of waiting for an admin to hand it out.
+    """
+    permission_classes = [IsOfficerOrAdmin]
+
+    def post(self, request, pk):
+        complaint = generics.get_object_or_404(Complaint, pk=pk)
+        user = request.user
+
+        if user.role == 'OFFICER':
+            if complaint.assigned_department != user.department:
+                return Response({
+                    'success': False,
+                    'message': 'This grievance belongs to a different department.'
+                }, status=status.HTTP_403_FORBIDDEN)
+            if complaint.assigned_officer_id and complaint.assigned_officer_id != user.id:
+                return Response({
+                    'success': False,
+                    'message': f'Already claimed by {complaint.assigned_officer.get_full_name() or complaint.assigned_officer.username}.'
+                }, status=status.HTTP_409_CONFLICT)
+
+        updated_complaint = ComplaintService.claim_complaint(complaint=complaint, officer=user)
+
+        return Response({
+            'success': True,
+            'message': f'Ticket {updated_complaint.ticket_id} claimed. You are now the assigned officer.',
+            'complaint': ComplaintDetailSerializer(updated_complaint, context={'request': request}).data
+        }, status=status.HTTP_200_OK)
+
+
 class ToggleUpvoteView(APIView):
     """Allows citizens to upvote / confirm community complaints."""
     permission_classes = [permissions.IsAuthenticated]

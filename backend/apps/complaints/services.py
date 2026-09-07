@@ -230,6 +230,28 @@ class ComplaintService:
 
     @classmethod
     @transaction.atomic
+    def claim_complaint(cls, complaint: Complaint, officer) -> Complaint:
+        """
+        Lets an officer self-assign an unclaimed grievance in their department,
+        bumping it to VERIFIED if it is still sitting at PENDING.
+        """
+        complaint.assigned_officer = officer
+        if complaint.status == STATUS_PENDING:
+            complaint.status = STATUS_VERIFIED
+        complaint.save(update_fields=['assigned_officer', 'status'])
+
+        ComplaintActivityLog.objects.create(
+            complaint=complaint,
+            performed_by=officer,
+            action='CLAIMED',
+            new_status=complaint.status,
+            remarks=f"Claimed by {officer.get_full_name() or officer.username}."
+        )
+
+        return complaint
+
+    @classmethod
+    @transaction.atomic
     def toggle_upvote(cls, complaint: Complaint, user) -> dict:
         """
         Allows citizens to upvote/endorse community complaints.

@@ -50,6 +50,11 @@ export const complaintService = {
     return response.data;
   },
 
+  async claimComplaint(id) {
+    const response = await api.post(`/complaints/${id}/claim/`);
+    return response.data;
+  },
+
   async toggleUpvote(id) {
     const response = await api.post(`/complaints/${id}/upvote/`);
     return response.data;

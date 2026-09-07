@@ -8,6 +8,7 @@ from apps.complaints.views import (
     MyComplaintsView,
     DepartmentComplaintsView,
     UpdateComplaintStatusView,
+    ClaimComplaintView,
     ToggleUpvoteView,
     ComplaintGeoListView
 )
@@ -20,6 +21,7 @@ urlpatterns = [
     path('my/', MyComplaintsView.as_view(), name='my_complaints'),
     path('department-queue/', DepartmentComplaintsView.as_view(), name='department_queue'),
     path('<int:pk>/status/', UpdateComplaintStatusView.as_view(), name='update_status'),
+    path('<int:pk>/claim/', ClaimComplaintView.as_view(), name='claim_complaint'),
     path('<int:pk>/upvote/', ToggleUpvoteView.as_view(), name='toggle_upvote'),
     path('geo-pins/', ComplaintGeoListView.as_view(), name='geo_pins'),
 ]

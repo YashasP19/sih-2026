@@ -47,6 +47,7 @@ export default function AdminDashboard() {
   const [assignedOfficerId, setAssignedOfficerId] = useState('');
   const [resolutionFile, setResolutionFile] = useState(null);
   const [submittingUpdate, setSubmittingUpdate] = useState(false);
+  const [claimingId, setClaimingId] = useState(null);
 
   useEffect(() => {
     loadData(false);
@@ -116,6 +117,19 @@ export default function AdminDashboard() {
       addToast('Status update failed. Please try again.', 'error');
     } finally {
       setSubmittingUpdate(false);
+    }
+  };
+
+  const handleClaim = async (complaint) => {
+    setClaimingId(complaint.id);
+    try {
+      const res = await complaintService.claimComplaint(complaint.id);
+      addToast(res?.message || `Ticket ${complaint.ticket_id} claimed.`, 'success');
+      loadData();
+    } catch (err) {
+      addToast(err?.response?.data?.message || 'Could not claim this ticket.', 'error');
+    } finally {
+      setClaimingId(null);
     }
   };
 
@@ -334,6 +348,17 @@ export default function AdminDashboard() {
                       >
                         View Details
                       </button>
+                      {!item.assigned_officer_name && (
+                        <button
+                          type="button"
+                          onClick={() => handleClaim(item)}
+                          disabled={claimingId === item.id}
+                          className="flex items-center justify-center gap-1.5 px-4 py-2 border border-civic-teal text-civic-teal rounded-xl text-xs font-bold hover:bg-civic-teal-soft disabled:opacity-50"
+                        >
+                          <UserCheck className="w-3.5 h-3.5" />
+                          <span>{claimingId === item.id ? 'Claiming...' : 'Claim This Issue'}</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => openStatusModal(item)}

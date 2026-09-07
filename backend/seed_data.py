@@ -288,6 +288,27 @@ def seed_database():
             'keywords': ['streetlights off', 'dark lane', 'safety', 'bulbs'],
             'upvotes_count': 11,
             'created_at': now - timedelta(days=3),
+        },
+        {
+            'ticket_id': 'CIV-2026-7203',
+            'citizen': citizen_2,
+            'title': 'Collapsed Road Shoulder Blocking Half the Carriageway',
+            'description': 'Heavy monsoon runoff has washed out the road shoulder near the market junction, leaving a deep drop-off that has already damaged two vehicles. Barricading is needed until PWD can rebuild the shoulder.',
+            'category': 'ROADS_POTHOLES',
+            'urgency': URGENCY_HIGH,
+            'priority_score': 71,
+            'status': STATUS_VERIFIED,
+            'assigned_department': DEPT_ROADS,
+            'assigned_officer': None,
+            'latitude': 28.6295,
+            'longitude': 77.2110,
+            'address': 'Panchkuian Marg Market Junction, Near Bus Stop',
+            'landmark': 'Opposite Petrol Pump',
+            'ward_number': 'Ward 12',
+            'pincode': '110001',
+            'keywords': ['road shoulder collapse', 'monsoon damage', 'vehicle damage', 'pwd'],
+            'upvotes_count': 14,
+            'created_at': now - timedelta(hours=5),
         }
     ]
 
