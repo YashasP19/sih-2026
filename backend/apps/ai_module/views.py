@@ -68,6 +68,7 @@ class RealtimeAIAnalysisView(APIView):
     def post(self, request):
         title = request.data.get('title', '')
         description = request.data.get('description', '')
+        address = request.data.get('address', '')
         lat = request.data.get('latitude')
         lon = request.data.get('longitude')
 
@@ -119,6 +120,11 @@ class RealtimeAIAnalysisView(APIView):
             nearby_complaints_count=nearby_count
         )
 
+        # 5. Preview which university this would route to (read-only, no DB writes)
+        from apps.innovation.services import ChallengeRoutingService
+        domain = ChallengeRoutingService.resolve_domain(predicted_category)
+        matched_university, routing_reason = ChallengeRoutingService.find_university(domain, address)
+
         return Response({
             'success': True,
             'analysis': {
@@ -129,7 +135,10 @@ class RealtimeAIAnalysisView(APIView):
                 'priority_score': priority_data['priority_score'],
                 'priority_factors': priority_data['factors'],
                 'extracted_keywords': keywords,
-                'duplicate_check': duplicate_info
+                'duplicate_check': duplicate_info,
+                'domain': domain,
+                'matched_university': matched_university.name if matched_university else None,
+                'routing_reason': routing_reason
             }
         }, status=status.HTTP_200_OK)
 

@@ -66,12 +66,13 @@ export const complaintService = {
     return response.data;
   },
 
-  async analyzeComplaintAI(title, description, latitude = null, longitude = null) {
+  async analyzeComplaintAI(title, description, latitude = null, longitude = null, address = '') {
     const response = await api.post('/ai/analyze/', {
       title,
       description,
       latitude,
       longitude,
+      address,
     });
     return response.data;
   },

@@ -67,7 +67,8 @@ export default function SubmitComplaint() {
             formData.title,
             formData.description,
             formData.latitude,
-            formData.longitude
+            formData.longitude,
+            formData.address
           );
           if (res?.analysis) {
             setAiAnalysis(res.analysis);
@@ -113,6 +114,7 @@ export default function SubmitComplaint() {
             suggested_department: 'Auto-Routing Active',
             extracted_keywords: ['civic issue', 'locality'],
             duplicate_check: { is_duplicate: false },
+            matched_university: null,
           });
         } finally {
           setAiLoading(false);
@@ -121,7 +123,7 @@ export default function SubmitComplaint() {
     }, 600);
 
     return () => clearTimeout(debounceTimerRef.current);
-  }, [formData.title, formData.description, formData.latitude, formData.longitude]);
+  }, [formData.title, formData.description, formData.latitude, formData.longitude, formData.address]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -420,6 +422,17 @@ export default function SubmitComplaint() {
                   <p className="text-sm font-bold text-civic-teal mt-1">{aiAnalysis.suggested_department}</p>
                   <p className="text-[10px] text-civic-mute mt-0.5">Confidence: {Math.round(aiAnalysis.confidence * 100)}%</p>
                 </div>
+
+                {/* Matched University */}
+                {aiAnalysis.matched_university && (
+                  <div className="p-4 rounded-2xl bg-white border border-civic-line">
+                    <p className="text-civic-mute font-semibold text-[10px] uppercase">Matching Institution for Research & Fix</p>
+                    <p className="text-sm font-bold text-civic-teal mt-1">{aiAnalysis.matched_university}</p>
+                    {aiAnalysis.routing_reason && (
+                      <p className="text-[10px] text-civic-mute mt-0.5">{aiAnalysis.routing_reason}</p>
+                    )}
+                  </div>
+                )}
 
                 {/* Extracted Keywords */}
                 {aiAnalysis.extracted_keywords?.length > 0 && (
