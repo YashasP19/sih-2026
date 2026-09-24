@@ -66,9 +66,13 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300 ${logoBg}`}>
-              <Lightbulb className={`w-5 h-5 ${logoIconColor}`} />
-            </div>
+            <img
+              src="/urban_lens_logo.svg"
+              alt="Urban Lens Logo"
+              width="40"
+              height="38"
+              className="w-[40px] h-[38px] rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-300 object-contain"
+            />
             <div>
               <div className="flex items-baseline gap-1">
                 <span className={`font-display text-lg font-bold tracking-tight ${textColor}`}>Urban Lens</span>
