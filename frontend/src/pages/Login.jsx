@@ -66,8 +66,14 @@ export default function Login() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md animate-fade-up">
         <div className="text-center mb-8">
-          <div className="inline-flex w-14 h-14 rounded-2xl bg-civic-teal text-white items-center justify-center shadow-lift mb-4 animate-scale-up">
-            <Lightbulb className="w-7 h-7" />
+          <div className="inline-flex mb-4 animate-scale-up">
+            <img
+              src="/urban_lens_logo.svg"
+              alt="Urban Lens"
+              width="56"
+              height="53"
+              className="w-14 h-[53px] rounded-2xl shadow-lift object-contain"
+            />
           </div>
           <h1 className="font-display text-3xl font-bold text-civic-ink tracking-tight">Welcome back</h1>
           <p className="text-sm text-civic-mute mt-2">
