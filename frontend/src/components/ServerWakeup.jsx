@@ -3,12 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 const BACKEND_HEALTH_URL = `${import.meta.env.VITE_API_URL}/`;
 const PING_INTERVAL_MS = 9 * 60 * 1000; // ping every 9 min to keep server warm
 const SLOW_THRESHOLD_MS = 4000; // show toast only if >4s
+const COLD_START_SECONDS = 45; // typical cold-start duration to count down from
 
 export default function ServerWakeup() {
   const [showToast, setShowToast] = useState(false);
   const [status, setStatus] = useState('connecting'); // 'connecting' | 'online'
+  const [secondsLeft, setSecondsLeft] = useState(COLD_START_SECONDS);
   const intervalRef = useRef(null);
   const toastTimerRef = useRef(null);
+  const countdownRef = useRef(null);
 
   const pingBackend = async (showIndicator = false) => {
     const start = Date.now();
@@ -17,6 +20,10 @@ export default function ServerWakeup() {
       toastTimerRef.current = setTimeout(() => {
         setShowToast(true);
         setStatus('connecting');
+        setSecondsLeft(COLD_START_SECONDS);
+        countdownRef.current = setInterval(() => {
+          setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+        }, 1000);
       }, SLOW_THRESHOLD_MS);
     }
 
@@ -27,6 +34,7 @@ export default function ServerWakeup() {
       });
 
       clearTimeout(toastTimerRef.current);
+      clearInterval(countdownRef.current);
       const elapsed = Date.now() - start;
 
       if (showIndicator) {
@@ -39,6 +47,7 @@ export default function ServerWakeup() {
       }
     } catch {
       clearTimeout(toastTimerRef.current);
+      clearInterval(countdownRef.current);
       if (showIndicator) {
         setStatus('connecting');
         setShowToast(true);
@@ -52,6 +61,7 @@ export default function ServerWakeup() {
     return () => {
       clearInterval(intervalRef.current);
       clearTimeout(toastTimerRef.current);
+      clearInterval(countdownRef.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -72,14 +82,14 @@ export default function ServerWakeup() {
         padding: '12px 22px',
         borderRadius: '14px',
         background: status === 'online'
-          ? 'linear-gradient(135deg, #10b981, #059669)'
-          : 'linear-gradient(135deg, #0f172a ee, #1e293b)',
-        color: '#fff',
+          ? 'linear-gradient(135deg, #F0DED4, #EFEBE1)'
+          : 'linear-gradient(135deg, #FFFCF6, #F8F5EE)',
+        color: '#1C1C1C',
         fontSize: '14px',
         fontWeight: '500',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
+        boxShadow: '0 8px 32px rgba(28,28,28,0.12)',
         backdropFilter: 'blur(16px)',
-        border: '1px solid rgba(255,255,255,0.12)',
+        border: '1px solid #E3DCC9',
         transition: 'background 0.5s ease',
         fontFamily: 'Inter, system-ui, sans-serif',
         letterSpacing: '0.01em',
@@ -102,14 +112,16 @@ export default function ServerWakeup() {
                   width: '7px',
                   height: '7px',
                   borderRadius: '50%',
-                  background: '#60a5fa',
+                  background: '#C1694F',
                   animation: `wakeupBounce 1.2s ease-in-out ${i * 0.2}s infinite`,
                   display: 'inline-block',
                 }}
               />
             ))}
           </span>
-          Connecting to server&hellip; please wait
+          <span style={{ color: '#1C1C1C' }}>
+            Connecting to server&hellip; please wait ({secondsLeft}s)
+          </span>
         </>
       )}
       <style>{`
