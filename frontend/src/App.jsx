@@ -8,6 +8,7 @@ import NotificationToast from './components/NotificationToast';
 import ComplaintChatbot from './components/ComplaintChatbot';
 import Footer from './components/Footer';
 import AppRoutes from './routes';
+import ServerWakeup from './components/ServerWakeup';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
               <Footer />
               <NotificationToast />
               <ComplaintChatbot />
+              <ServerWakeup />
             </div>
           </BrowserRouter>
         </NotificationProvider>
